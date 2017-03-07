@@ -9,8 +9,8 @@
         }
     ],
     "require": {
-        "php": "^5.3.*",
-        "twig/twig": "v1.32.*",
+        "php": ">=5.3.3|7.*",
+        "twig/twig": "1.32.*",
         "ext-pdo": "*"
     },
     "autoload": {
