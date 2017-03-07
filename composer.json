@@ -8,8 +8,10 @@
             "homepage": "https://github.com/Idrinth"
         }
     ],
-    "require-dev": {
-        "twig/twig": "v1.32.*"
+    "require": {
+        "php": "^5.3.*",
+        "twig/twig": "v1.32.*",
+        "ext-pdo": "*"
     },
     "autoload": {
         "psr-4": {
