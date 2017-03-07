@@ -12,4 +12,4 @@ services:
 before_script:
   - composer update
 script:
-  - index.php
+  - php index.php
