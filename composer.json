@@ -1,0 +1,19 @@
+{
+    "name": "Idrinth/entity-generator",
+    "description": "Generates entities from a given database.",
+    "homepage": "https://github.com/Idrinth/EntityGenerator",
+    "authors": [
+        {
+            "name": "Björn Büttner",
+            "homepage": "https://github.com/Idrinth"
+        }
+    ],
+    "require-dev": {
+        "twig/twig": "v1.32.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "De\\Idrinth\\EntityGenerator\\": "src"
+        }
+    }
+}
