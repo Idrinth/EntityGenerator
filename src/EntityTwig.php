@@ -64,7 +64,7 @@ class EntityTwig extends Twig_Extension {
     }
 
     /**
-     * 
+     *
      * @param string $name
      * @return Twig_SimpleFilter
      */

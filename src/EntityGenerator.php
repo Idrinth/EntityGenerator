@@ -91,7 +91,7 @@ WHERE c.TABLE_SCHEMA=:schema
     }
 
     /**
-     * 
+     *
      * @param Twig_Environment $twig
      * @return Twig_Environment
      */
@@ -172,7 +172,7 @@ WHERE c.TABLE_SCHEMA=:schema
     }
 
     /**
-     * 
+     *
      * @param string $path
      * @return void
      * @throws UnderflowException
@@ -190,7 +190,7 @@ WHERE c.TABLE_SCHEMA=:schema
     }
 
     /**
-     * 
+     *
      * @param string $path
      * @param array $data
      * @return boolean

@@ -9,12 +9,12 @@ use PHPUnit_Framework_AssertionFailedError;
 class EntityTwigTest extends TestCase {
     /**
      *
-     * @var EntityTwig 
+     * @var EntityTwig
      */
     protected $object;
 
     /**
-     * 
+     *
      * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanHandleUnderscore()
@@ -23,7 +23,7 @@ class EntityTwigTest extends TestCase {
     }
 
     /**
-     * 
+     *
      * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanHandleMinus()
@@ -41,7 +41,7 @@ class EntityTwigTest extends TestCase {
     }
 
     /**
-     * 
+     *
      * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanHandleBackSlash()
@@ -50,7 +50,7 @@ class EntityTwigTest extends TestCase {
     }
 
     /**
-     * 
+     *
      * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanHandleDot()
@@ -59,7 +59,7 @@ class EntityTwigTest extends TestCase {
     }
 
     /**
-     * 
+     *
      * @throws PHPUnit_Framework_AssertionFailedError
      */
     protected function compare($input, $upper, $lower)

@@ -11,7 +11,7 @@ use SebastianBergmann\RecursionContext\Exception;
 class EntityGeneratorTest extends TestCase {
 
     /**
-     * 
+     *
      * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanGenerateDefaultTableClasses()

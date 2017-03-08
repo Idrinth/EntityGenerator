@@ -2,11 +2,8 @@
 
 namespace De\Idrinth\EntityGenerator\Test;
 
-use De\Idrinth\EntityGenerator\EntityGenerator;
-use PDO;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_AssertionFailedError;
-use SebastianBergmann\RecursionContext\Exception;
 
 class PropertyTest extends TestCase {
 
@@ -44,7 +41,7 @@ class PropertyTest extends TestCase {
         'timestamp' => 'string'
     );
     /**
-     * 
+     *
      * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanHandleBasicTypes()
@@ -76,7 +73,7 @@ class PropertyTest extends TestCase {
         $this->assertEquals($expected, $property->getTarget());
     }
     /**
-     * 
+     *
      * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanHandleForeignKeys()
