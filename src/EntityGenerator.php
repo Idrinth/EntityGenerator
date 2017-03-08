@@ -4,9 +4,9 @@ namespace De\Idrinth\EntityGenerator;
 
 use PDO;
 use PDOStatement;
-use Twig_Enviroment;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
+use Twig_Template;
 
 class EntityGenerator {
 
@@ -24,7 +24,7 @@ class EntityGenerator {
 
     /**
      *
-     * @var Twig_Enviroment
+     * @var Twig_Template
      */
     protected $twig;
 
@@ -65,21 +65,45 @@ WHERE c.TABLE_SCHEMA=:schema
 
     /**
      *
+     * @var string[]
+     */
+    protected static $templates = array('custom.twig', 'base.twig');
+
+    /**
+     *
      * @param PDO $database
      * @param string $basePath
      * @param string $namespace
+     * @param Twig_Environment $twig
      */
-    public function __construct(PDO $database, $basePath, $namespace,
-                                array $sources = array())
-    {
+    public function __construct(
+            PDO $database,
+            $basePath,
+            $namespace,
+            Twig_Environment $twig = null
+    ) {
         $this->basePath = $basePath;
         $this->namespace = trim($namespace, '\\');
-        array_push($sources,
-                   __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'templates');
-        $this->twig = new Twig_Environment(new Twig_Loader_Filesystem($sources));
-        $this->twig->addExtension(new \De\Idrinth\EntityGenerator\EntityTwig());
+        $this->twig = $this->getTwig($twig)->resolveTemplate(self::$templates);
         $this->getTables = $database->prepare(self::$getTablesStatement);
         $this->getProperties = $database->prepare(self::$getPropertiesStatement);
+    }
+
+    /**
+     * 
+     * @param Twig_Environment $twig
+     * @return Twig_Environment
+     */
+    protected function getTwig(Twig_Environment $twig = null)
+    {
+        if (!$twig)
+        {
+            $folder = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'templates';
+            $loader = new Twig_Loader_Filesystem(array($folder));
+            $twig = new Twig_Environment($loader);
+        }
+        $twig->addExtension(new EntityTwig());
+        return $twig;
     }
 
     /**
@@ -104,13 +128,15 @@ WHERE c.TABLE_SCHEMA=:schema
      *
      * @param string $table
      * @param string $schema
-     * @return \De\Idrinth\EntityGenerator\Property[]
+     * @return Property[]
      */
     protected function getProperties($table, $schema)
     {
         $this->getProperties->execute(array(':schema' => $schema, ':table' => $table));
-        $properties = $this->getProperties->fetchAll(PDO::FETCH_CLASS,
-                                                     'De\Idrinth\EntityGenerator\Property');
+        $properties = $this->getProperties->fetchAll(
+                PDO::FETCH_CLASS,
+                'De\Idrinth\EntityGenerator\Property'
+        );
         $this->getProperties->closeCursor();
         return $properties;
     }
@@ -124,21 +150,34 @@ WHERE c.TABLE_SCHEMA=:schema
     protected function buildClass($table, $schema)
     {
         $class = EntityTwig::toUpperCamelCase($table);
-        $path = str_replace('{{schema}}', EntityTwig::toUpperCamelCase($schema),
-                                                                       $this->basePath) . '/Entity/';
+        $path = str_replace(
+                '{{schema}}',
+                EntityTwig::toUpperCamelCase($schema),
+                $this->basePath
+            ) . '/Entity/';
         if (!file_exists($path))
         {
             mkdir($path, 0777, true);
         }
-        file_put_contents(
+        $this->write(
                 $path . $class . '.php',
-                $this->twig->resolveTemplate(array('custom.twig', 'base.twig'))->render(
-                        array(
-                            'table' => $table,
-                            'schema' => $schema,
-                            'namespace' => $this->namespace,
-                            'properties' => $this->getProperties($table, $schema)
-        )));
+                array(
+                    'table' => $table,
+                    'schema' => $schema,
+                    'namespace' => $this->namespace,
+                    'properties' => $this->getProperties($table, $schema)
+                )
+            );
+    }
+
+    /**
+     * 
+     * @param string $path
+     * @param array $data
+     * @return boolean
+     */
+    protected function write($path,$data) {
+        return file_put_contents($path, $this->twig->render($data));
     }
 
 }
