@@ -6,7 +6,8 @@ use De\Idrinth\EntityGenerator\EntityTwig;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_AssertionFailedError;
 
-class EntityTwigTest extends TestCase {
+class EntityTwigTest extends TestCase
+{
     /**
      *
      * @var EntityTwig
@@ -76,5 +77,4 @@ class EntityTwigTest extends TestCase {
         $this->assertEquals($upper, $this->object->toUpperCamelCase($input));
         $this->assertEquals($lower, $this->object->toLowerCamelCase($input));
     }
-
 }

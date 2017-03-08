@@ -2,8 +2,8 @@
 
 namespace De\Idrinth\EntityGenerator;
 
-abstract class BaseEntity {
-
+abstract class BaseEntity
+{
     /**
      *
      * @var boolean
@@ -22,8 +22,7 @@ abstract class BaseEntity {
      */
     public function __construct($aid = null)
     {
-        if ((int) $aid)
-        {
+        if ((int) $aid) {
             $this->aid = (int) $aid;
         }
     }
@@ -41,11 +40,9 @@ abstract class BaseEntity {
      */
     protected function initEntity()
     {
-        if ($this->aid && !$this->entityInitialized)
-        {
+        if ($this->aid && !$this->entityInitialized) {
             EntityHandler::load($this);
             $this->entityInitialized = true;
         }
     }
-
 }

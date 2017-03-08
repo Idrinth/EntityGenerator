@@ -5,8 +5,8 @@ namespace De\Idrinth\EntityGenerator\Test;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_AssertionFailedError;
 
-class PropertyTest extends TestCase {
-
+class PropertyTest extends TestCase
+{
     /**
      *
      * @var string[]
@@ -40,47 +40,50 @@ class PropertyTest extends TestCase {
         'datetime' => 'string',
         'timestamp' => 'string'
     );
+
     /**
      *
      * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanHandleBasicTypes()
     {
-        foreach(self::$types as $from => $to) {
+        foreach (self::$types as $from => $to) {
             $this->handleBasicType($from, $to);
         }
     }
+
     /**
      * @param string $type
      * @param string $expected
      * @throws PHPUnit_Framework_AssertionFailedError
      */
-    public function handleBasicType($type,$expected)
+    public function handleBasicType($type, $expected)
     {
         $property = new Property('test', $type, null, false);
         $this->assertEquals($expected, $property->getType());
         $this->assertEquals('', $property->getTarget());
     }
+
     /**
      * @param string $type
      * @param string $expected
      * @throws PHPUnit_Framework_AssertionFailedError
      */
-    public function handleFKType($type,$expected)
+    public function handleFKType($type, $expected)
     {
         $property = new Property('test', $type, $expected, false);
         $this->assertEquals($expected, $property->getType());
         $this->assertEquals($expected, $property->getTarget());
     }
+
     /**
      *
      * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanHandleForeignKeys()
     {
-        foreach(array_keys(self::$types) as $from) {
+        foreach (array_keys(self::$types) as $from) {
             $this->handleFKType($from, 'my-key');
         }
     }
-
 }

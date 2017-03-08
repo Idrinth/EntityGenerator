@@ -4,7 +4,8 @@ use De\Idrinth\EntityGenerator\BaseEntity;
 
 namespace De\Idrinth\EntityGenerator;
 
-interface EntityHandler {
+interface EntityHandler
+{
 
     /**
      * This loads data into the given entity

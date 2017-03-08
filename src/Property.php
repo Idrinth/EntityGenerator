@@ -2,8 +2,8 @@
 
 namespace De\Idrinth\EntityGenerator;
 
-class Property {
-
+class Property
+{
     /**
      *
      * @var string[]
@@ -50,9 +50,9 @@ class Property {
      */
     public function __construct()
     {
-        $this->name = $this->name . '';
-        $this->type = $this->type . '';
-        $this->target = $this->target . '';
+        $this->name = $this->name.'';
+        $this->type = $this->type.'';
+        $this->target = $this->target.'';
         $this->autoincrement = (bool) $this->autoincrement;
     }
 
@@ -71,12 +71,10 @@ class Property {
      */
     public function getType()
     {
-        if ($this->getTarget())
-        {
+        if ($this->getTarget()) {
             return $this->getTarget();
         }
-        if (isset(self::$types[$this->type]))
-        {
+        if (isset(self::$types[$this->type])) {
             return self::$types[$this->type];
         }
         return 'string';
@@ -99,5 +97,4 @@ class Property {
     {
         return $this->autoincrement;
     }
-
 }

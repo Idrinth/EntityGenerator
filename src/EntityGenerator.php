@@ -9,8 +9,8 @@ use Twig_Loader_Filesystem;
 use Twig_Template;
 use UnderflowException;
 
-class EntityGenerator {
-
+class EntityGenerator
+{
     /**
      *
      * @var string
@@ -78,10 +78,10 @@ WHERE c.TABLE_SCHEMA=:schema
      * @param Twig_Environment $twig
      */
     public function __construct(
-            PDO $database,
-            $basePath,
-            $namespace,
-            Twig_Environment $twig = null
+        PDO $database,
+        $basePath,
+        $namespace,
+        Twig_Environment $twig = null
     ) {
         $this->basePath = $basePath;
         $this->namespace = trim($namespace, '\\');
@@ -97,11 +97,10 @@ WHERE c.TABLE_SCHEMA=:schema
      */
     protected function getTwig(Twig_Environment $twig = null)
     {
-        if (!$twig)
-        {
-            $folder = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'templates';
+        if (!$twig) {
+            $folder = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'templates';
             $loader = new Twig_Loader_Filesystem(array($folder));
-            $twig = new Twig_Environment($loader);
+            $twig   = new Twig_Environment($loader);
         }
         $twig->addExtension(new EntityTwig());
         return $twig;
@@ -114,11 +113,9 @@ WHERE c.TABLE_SCHEMA=:schema
      */
     public function run(array $schemas)
     {
-        foreach ($schemas as $schema)
-        {
+        foreach ($schemas as $schema) {
             $this->getTables->execute(array(':schema' => $schema));
-            foreach ($this->getTables->fetchAll(PDO::FETCH_OBJ) as $table)
-            {
+            foreach ($this->getTables->fetchAll(PDO::FETCH_OBJ) as $table) {
                 $this->buildClass($table->name, $schema);
             }
             $this->getTables->closeCursor();
@@ -135,8 +132,7 @@ WHERE c.TABLE_SCHEMA=:schema
     {
         $this->getProperties->execute(array(':schema' => $schema, ':table' => $table));
         $properties = $this->getProperties->fetchAll(
-                PDO::FETCH_CLASS,
-                'De\Idrinth\EntityGenerator\Property'
+            PDO::FETCH_CLASS, 'De\Idrinth\EntityGenerator\Property'
         );
         $this->getProperties->closeCursor();
         return $properties;
@@ -152,22 +148,22 @@ WHERE c.TABLE_SCHEMA=:schema
     protected function buildClass($table, $schema)
     {
         $class = EntityTwig::toUpperCamelCase($table);
-        $path = str_replace(
+        $path  = str_replace(
                 '{{schema}}',
                 EntityTwig::toUpperCamelCase($schema),
                 $this->basePath
-            ) . '/Entity/';
+            ).DIRECTORY_SEPARATOR.'Entity';
         $this->createDirectoryIfNotExists($path);
-        if(!$this->write(
-                $path . $class . '.php',
+        if (!$this->write(
+                $path.DIRECTORY_SEPARATOR.$class.'.php',
                 array(
-                    'table' => $table,
-                    'schema' => $schema,
-                    'namespace' => $this->namespace,
-                    'properties' => $this->getTableProperties($table, $schema)
+                'table' => $table,
+                'schema' => $schema,
+                'namespace' => $this->namespace,
+                'properties' => $this->getTableProperties($table, $schema)
                 )
             )) {
-            throw new UnderflowException($path . $class . '.php was not writeable.');
+            throw new UnderflowException($path.$class.'.php was not writeable.');
         }
     }
 
@@ -177,16 +173,16 @@ WHERE c.TABLE_SCHEMA=:schema
      * @return void
      * @throws UnderflowException
      */
-    protected function createDirectoryIfNotExists($path) {
-        if (file_exists($path))
-        {
+    protected function createDirectoryIfNotExists($path)
+    {
+        if (file_exists($path)) {
             return true;
         }
-        if(mkdir($path, 0777, true)) {
+        if (mkdir($path, 0777, true)) {
             sleep(1);
             return file_exists($path);
         }
-        throw new UnderflowException($path . ' could\'t be created.');
+        throw new UnderflowException($path.' could\'t be created.');
     }
 
     /**
@@ -195,8 +191,8 @@ WHERE c.TABLE_SCHEMA=:schema
      * @param array $data
      * @return boolean
      */
-    protected function write($path,$data) {
+    protected function write($path, $data)
+    {
         return file_put_contents($path, $this->twig->render($data));
     }
-
 }

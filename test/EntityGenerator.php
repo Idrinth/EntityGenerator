@@ -5,7 +5,9 @@ namespace De\Idrinth\EntityGenerator\Test;
 use PDO;
 use De\Idrinth\EntityGenerator\EntityGenerator as EntityGeneratorImplementation;
 
-class EntityGenerator extends EntityGeneratorImplementation {
+class EntityGenerator extends EntityGeneratorImplementation
+{
+
     /**
      *
      * @param string $schema
@@ -37,5 +39,4 @@ class EntityGenerator extends EntityGeneratorImplementation {
     {
         return parent::createDirectoryIfNotExists($path);
     }
-
 }
