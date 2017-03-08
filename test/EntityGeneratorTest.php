@@ -54,7 +54,18 @@ class EntityGeneratorTest extends TestCase {
     }
 
     /**
+     * @depends testCanFindTables
+     */
+    public function testCanCreateFolder() {
+        $path = __DIR__.DIRECTORY_SEPARATOR.'GeneratorExample'.DIRECTORY_SEPARATOR.'Entity';
+        if(!$this->object->createDirectoryIfNotExists($path)) {
+            throw new PHPUnit_Framework_AssertionFailedError('can\'t create path '.$path, 4);
+        }
+    }
+
+    /**
      * @depends testCanFindProperties
+     * @depends testCanCreateFolder
      * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanGenerateDefaultTableClasses()

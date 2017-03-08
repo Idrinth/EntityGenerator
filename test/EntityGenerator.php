@@ -28,4 +28,14 @@ class EntityGenerator extends EntityGeneratorImplementation {
         return parent::getTableProperties($table, $schema);
     }
 
+    /**
+     *
+     * @param string $path
+     * @return boolean
+     */
+    public function createDirectoryIfNotExists($path)
+    {
+        return parent::createDirectoryIfNotExists($path);
+    }
+
 }

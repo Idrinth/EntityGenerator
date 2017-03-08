@@ -180,11 +180,11 @@ WHERE c.TABLE_SCHEMA=:schema
     protected function createDirectoryIfNotExists($path) {
         if (file_exists($path))
         {
-            return;
+            return true;
         }
         if(mkdir($path, 0777, true)) {
             sleep(1);
-            return;
+            return file_exists($path);
         }
         throw new UnderflowException($path . ' could\'t be created.');
     }
