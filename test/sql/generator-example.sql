@@ -1,6 +1,14 @@
 CREATE DATABASE IF NOT EXISTS `generator-example`;
 USE `generator-example`;
 
+
+CREATE TABLE IF NOT EXISTS `list` (
+  `aid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`aid`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE IF NOT EXISTS `element` (
   `aid` int(11) NOT NULL AUTO_INCREMENT,
   `list` int(10) unsigned DEFAULT NULL,
@@ -10,11 +18,4 @@ CREATE TABLE IF NOT EXISTS `element` (
   PRIMARY KEY (`aid`),
   KEY `FK_element_lists` (`list`),
   CONSTRAINT `FK_element_lists` FOREIGN KEY (`list`) REFERENCES `list` (`aid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `list` (
-  `aid` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`aid`),
-  UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
