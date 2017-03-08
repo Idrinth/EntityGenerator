@@ -9,6 +9,7 @@ php:
 services:
   - mysql
 before_script:
+  - phpenv config-rm xdebug.ini
   - composer update
   - mysql < test/sql/generator-example.sql
 script:
