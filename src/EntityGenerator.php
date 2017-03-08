@@ -43,6 +43,12 @@ class EntityGenerator
 
     /**
      *
+     * @var EntityTwig
+     */
+    protected $formatter;
+
+    /**
+     *
      * @var string
      */
     protected static $getTablesStatement = "SELECT TABLE_NAME AS name
@@ -88,6 +94,7 @@ WHERE c.TABLE_SCHEMA=:schema
         $this->twig = $this->getTwig($twig)->resolveTemplate(self::$templates);
         $this->getTables = $database->prepare(self::$getTablesStatement);
         $this->getProperties = $database->prepare(self::$getPropertiesStatement);
+        $this->formatter = new EntityTwig();
     }
 
     /**
@@ -147,10 +154,10 @@ WHERE c.TABLE_SCHEMA=:schema
      */
     protected function buildClass($table, $schema)
     {
-        $class = EntityTwig::toUpperCamelCase($table);
+        $class = $this->formatter->toUpperCamelCase($table);
         $path  = str_replace(
                 '{{schema}}',
-                EntityTwig::toUpperCamelCase($schema),
+                $this->formatter->toUpperCamelCase($schema),
                 $this->basePath
             ).DIRECTORY_SEPARATOR.'Entity';
         $this->createDirectoryIfNotExists($path);

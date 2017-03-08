@@ -15,7 +15,8 @@
         "ext-pdo": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "*",
+        "codacy/coverage": "dev-master"
     },
     "autoload": {
         "psr-4": {
