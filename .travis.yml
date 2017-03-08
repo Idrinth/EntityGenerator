@@ -13,4 +13,4 @@ before_script:
   - composer update
   - mysql < test/sql/generator-example.sql
 script:
-  - phpunit --testdox --bootstrap vendor/autoload.php test/
+  - phpunit --bootstrap vendor/autoload.php test/
