@@ -34,15 +34,4 @@ abstract class BaseEntity
     {
         return $this->aid;
     }
-
-    /**
-     *
-     */
-    protected function initEntity()
-    {
-        if ($this->aid && !$this->entityInitialized) {
-            EntityHandler::load($this);
-            $this->entityInitialized = true;
-        }
-    }
 }

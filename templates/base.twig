@@ -1,11 +1,7 @@
 <?php
 namespace {{namespace}}\{{schema|toUpperCamelCase}}\Entity;
-{% block baseEntity %}
-    use De\Idrinth\EntityGenerator\BaseEntity;
-{% endblock %}
-{% block baseFactory %}
-    use De\Idrinth\EntityGenerator\EntityHandler;
-{% endblock %}
+{% block baseEntity %}use De\Idrinth\EntityGenerator\BaseEntity;{% endblock %}
+{% block baseFactory %}se De\Idrinth\EntityGenerator\EntityHandler;{% endblock %}
 {% block classHeader %}
     /**
     * Automatically generated entity for
@@ -57,5 +53,26 @@ class {{table|toUpperCamelCase}} extends BaseEntity {
             {% endblock %}
         {% endif %}
     {% endblock %}
+
+    /**
+     *
+     */
+    protected function initEntity()
+    {
+        if ($this->aid && !$this->entityInitialized) {
+            EntityHandler::load($this);
+            $this->entityInitialized = true;
+        }
+    }
+
+    /**
+     *
+     */
+    protected function store()
+    {
+        if ($this->entityInitialized) {
+            EntityHandler::store($this);
+        }
+    }
 {% endfor %}
 }

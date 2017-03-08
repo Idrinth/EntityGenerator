@@ -15,7 +15,7 @@ class EntityTwigTest extends TestCase
     protected $object;
 
     /**
-     * 
+     * Provide EntityTwig-Extension
      */
     public function setUp()
     {

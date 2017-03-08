@@ -59,7 +59,11 @@ WHERE TABLE_SCHEMA=:schema";
      *
      * @var string
      */
-    protected static $getPropertiesStatement = "SELECT c.COLUMN_NAME AS name,c.DATA_TYPE AS type,fk.REFERENCED_TABLE_NAME AS target,IF(c.EXTRA='auto_increment',1,0) as autoincrement
+    protected static $getPropertiesStatement = "
+SELECT c.COLUMN_NAME AS name,
+    c.DATA_TYPE AS type,
+    fk.REFERENCED_TABLE_NAME AS target,
+    IF(c.EXTRA='auto_increment',1,0) as autoincrement
 FROM information_schema.`COLUMNS` AS c
 LEFT JOIN information_schema.`KEY_COLUMN_USAGE` AS fk
     ON c.TABLE_SCHEMA=fk.TABLE_SCHEMA

@@ -93,7 +93,7 @@ class Property
      *
      * @return boolean
      */
-    public function getAutoincrement()
+    public function isAutoincrement()
     {
         return $this->autoincrement;
     }

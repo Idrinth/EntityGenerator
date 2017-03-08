@@ -16,7 +16,7 @@ class EntityGeneratorTest extends TestCase
     protected $object;
 
     /**
-     * 
+     * provide EntityGenerator
      */
     public function setUp()
     {
