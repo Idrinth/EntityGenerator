@@ -1,6 +1,5 @@
 language: php
 php:
-  - '5.3.3'
   - '5.3'
   - '5.4'
   - '5.5'
@@ -13,5 +12,5 @@ before_script:
   - composer update
   - mysql < test/sql/generator-example.sql
 script:
-  - if [php test/run.php]; then phpunit --testdox --coverage-clover /tmp/coverage.xml --whitelist src/ --bootstrap vendor/autoload.php test/ else phpunit --testdox --bootstrap vendor/autoload.php test/; fi 
-  - if [php test/run.php]; then php vendor/bin/codacycoverage clover /tmp/coverage.xml ; fi;
+  - if [php test/run.php]; then phpunit --testdox --coverage-clover /tmp/coverage.xml --whitelist src/ --bootstrap vendor/autoload.php test/ ; else phpunit --testdox --bootstrap vendor/autoload.php test/; fi
+  - if [php test/run.php]; then php vendor/bin/codacycoverage clover /tmp/coverage.xml ; fi
