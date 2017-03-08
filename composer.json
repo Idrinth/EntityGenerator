@@ -2,6 +2,7 @@
     "name": "idrinth/entity-generator",
     "description": "Generates entities from a given database.",
     "homepage": "https://github.com/Idrinth/EntityGenerator",
+    "license": "MIT",
     "authors": [
         {
             "name": "Björn Büttner",
@@ -13,9 +14,17 @@
         "twig/twig": "1.32.*",
         "ext-pdo": "*"
     },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
     "autoload": {
         "psr-4": {
             "De\\Idrinth\\EntityGenerator\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "De\\Idrinth\\EntityGenerator\\Test\\": "test"
         }
     }
 }
