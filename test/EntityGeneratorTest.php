@@ -80,6 +80,7 @@ class EntityGeneratorTest extends TestCase
         try {
             $this->object->run(array('generator-example'));
         } catch (Exception $ex) {
+            echo $ex.'';
             throw new PHPUnit_Framework_AssertionFailedError($ex.'', 1, $ex);
         }
     }
