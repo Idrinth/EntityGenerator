@@ -7,6 +7,7 @@ use PDOStatement;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
 use Twig_Template;
+use UnderflowException;
 
 class EntityGenerator {
 
@@ -146,6 +147,7 @@ WHERE c.TABLE_SCHEMA=:schema
      * @param type $table
      * @param string $schema
      * @return type
+     * @throws UnderflowException
      */
     protected function buildClass($table, $schema)
     {
@@ -155,11 +157,8 @@ WHERE c.TABLE_SCHEMA=:schema
                 EntityTwig::toUpperCamelCase($schema),
                 $this->basePath
             ) . '/Entity/';
-        if (!file_exists($path))
-        {
-            mkdir($path, 0777, true);
-        }
-        $this->write(
+        $this->createDirectoryIfNotExists($path);
+        if(!$this->write(
                 $path . $class . '.php',
                 array(
                     'table' => $table,
@@ -167,7 +166,27 @@ WHERE c.TABLE_SCHEMA=:schema
                     'namespace' => $this->namespace,
                     'properties' => $this->getProperties($table, $schema)
                 )
-            );
+            )) {
+            throw new UnderflowException($path . $class . '.php was not writeable.');
+        }
+    }
+
+    /**
+     * 
+     * @param string $path
+     * @return void
+     * @throws UnderflowException
+     */
+    protected function createDirectoryIfNotExists($path) {
+        if (file_exists($path))
+        {
+            return;
+        }
+        if(mkdir($path, 0777, true)) {
+            sleep(1);
+            return;
+        }
+        throw new UnderflowException($path . ' could\'t be created.');
     }
 
     /**

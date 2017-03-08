@@ -32,6 +32,24 @@ class EntityGeneratorTest extends TestCase {
      * @depends testCanGenerateDefaultTableClasses
      * @throws PHPUnit_Framework_AssertionFailedError
      */
+    public function testDoFilesExist()
+    {
+        foreach (array('Element', 'ElementList') as $class)
+        {
+            if (!is_file(__DIR__.DIRECTORY_SEPARATOR.'GeneratorExample'.DIRECTORY_SEPARATOR.'Entity' .DIRECTORY_SEPARATOR. $class.'.php'))
+            {
+                throw new PHPUnit_Framework_AssertionFailedError(
+                        $class . ' has no file.',
+                        3
+                );
+            }
+        }
+    }
+
+    /**
+     * @depends testDoFilesExist
+     * @throws PHPUnit_Framework_AssertionFailedError
+     */
     public function testDoClassesExist()
     {
         foreach (array('Element', 'ElementList') as $class)
@@ -45,5 +63,4 @@ class EntityGeneratorTest extends TestCase {
             }
         }
     }
-
 }
