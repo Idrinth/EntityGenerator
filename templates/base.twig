@@ -1,7 +1,9 @@
 <?php
 namespace {{namespace}}\{{schema|toUpperCamelCase}}\Entity;
-{% block baseEntity %}use De\Idrinth\EntityGenerator\BaseEntity;{% endblock %}
-{% block baseFactory %}se De\Idrinth\EntityGenerator\EntityHandler;{% endblock %}
+{% block baseEntity %}
+use De\Idrinth\EntityGenerator\BaseEntity;{% endblock %}
+{% block baseFactory %}
+use De\Idrinth\EntityGenerator\EntityHandler;{% endblock %}
 {% block classHeader %}
     /**
     * Automatically generated entity for
