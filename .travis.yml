@@ -8,12 +8,9 @@ php:
   - '7.1'
 services:
   - mysql
-before_install:
-  - echo "extension = curl.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 before_script:
-  - phpenv config-rm xdebug.ini
   - composer update
   - mysql < test/sql/generator-example.sql
 script:
-  - phpunit --testdox --bootstrap vendor/autoload.php test/
-  - php vendor/bin/codacycoverage phpunit phpunit.xml
+  - phpunit --testdox --coverage-clover /tmp/coverage.xml --bootstrap vendor/autoload.php test/
+  - php vendor/bin/codacycoverage clover /tmp/coverage.xml
