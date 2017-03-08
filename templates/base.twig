@@ -55,6 +55,7 @@ class {{table|toUpperCamelCase}} extends BaseEntity {
             {% endblock %}
         {% endif %}
     {% endblock %}
+{% endfor %}
 
     /**
      *
@@ -76,5 +77,4 @@ class {{table|toUpperCamelCase}} extends BaseEntity {
             EntityHandler::store($this);
         }
     }
-{% endfor %}
 }
