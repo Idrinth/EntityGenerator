@@ -12,5 +12,5 @@ before_script:
   - composer update
   - mysql < test/sql/generator-example.sql
 script:
-  - phpunit --testdox --coverage-clover coverage.xml --whitelist src/ --bootstrap vendor/autoload.php test/
-  - php vendor/bin/codacycoverage clover coverage.xml
+  - phpunit --testdox --coverage-clover /tmp/coverage.xml --whitelist src/ --bootstrap vendor/autoload.php test/
+  - php vendor/bin/codacycoverage clover /tmp/coverage.xml
