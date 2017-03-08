@@ -14,6 +14,15 @@ class EntityTwigTest extends TestCase {
     protected $object;
 
     /**
+     * 
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->object = new EntityTwig();
+    }
+
+    /**
      *
      * @throws PHPUnit_Framework_AssertionFailedError
      */
@@ -64,10 +73,6 @@ class EntityTwigTest extends TestCase {
      */
     protected function compare($input, $upper, $lower)
     {
-        if (!$this->object)
-        {
-            $this->object = new EntityTwig();
-        }
         $this->assertEquals($upper, $this->object->toUpperCamelCase($input));
         $this->assertEquals($lower, $this->object->toLowerCamelCase($input));
     }

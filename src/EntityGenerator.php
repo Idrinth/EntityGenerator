@@ -109,8 +109,8 @@ WHERE c.TABLE_SCHEMA=:schema
 
     /**
      *
-     * @param string $schemas
-     * @return string[]
+     * @param string[] $schemas
+     * @return void
      */
     public function run(array $schemas)
     {
@@ -131,7 +131,7 @@ WHERE c.TABLE_SCHEMA=:schema
      * @param string $schema
      * @return Property[]
      */
-    protected function getProperties($table, $schema)
+    protected function getTableProperties($table, $schema)
     {
         $this->getProperties->execute(array(':schema' => $schema, ':table' => $table));
         $properties = $this->getProperties->fetchAll(
@@ -164,7 +164,7 @@ WHERE c.TABLE_SCHEMA=:schema
                     'table' => $table,
                     'schema' => $schema,
                     'namespace' => $this->namespace,
-                    'properties' => $this->getProperties($table, $schema)
+                    'properties' => $this->getTableProperties($table, $schema)
                 )
             )) {
             throw new UnderflowException($path . $class . '.php was not writeable.');
