@@ -78,8 +78,7 @@ class EntityGeneratorTest extends TestCase
      */
     public function testWriteClass()
     {
-        $this->assertGreaterThan(
-            0,
+        $this->assertTrue(
             $this->object->write(
                 __DIR__.DIRECTORY_SEPARATOR.'GeneratorExample'.DIRECTORY_SEPARATOR.'Entity'.DIRECTORY_SEPARATOR.'Element.php',
                 array(

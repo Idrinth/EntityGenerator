@@ -205,6 +205,6 @@ WHERE c.TABLE_SCHEMA=:schema
      */
     protected function write($path, $data)
     {
-        return file_put_contents($path, $this->twig->render($data));
+        return (bool) file_put_contents($path, $this->twig->render($data));
     }
 }

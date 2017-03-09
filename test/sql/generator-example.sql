@@ -1,7 +1,6 @@
 CREATE DATABASE IF NOT EXISTS `generator-example`;
 USE `generator-example`;
 
-
 CREATE TABLE IF NOT EXISTS `element_list` (
   `aid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
