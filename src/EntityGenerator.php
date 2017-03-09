@@ -189,14 +189,8 @@ WHERE c.TABLE_SCHEMA=:schema
         if (file_exists($path)) {
             return true;
         }
-        $counter=0;
-        while(!file_exists($path)&&$counter<5) {
-            mkdir($path, 0777, true);
-            sleep(1);
-            $counter++;
-        }
-        if(file_exists($path)) {
-            return true;
+        if (mkdir($path, 0777, true)) {
+            return file_exists($path);
         }
         throw new UnderflowException($path.' could\'t be created.');
     }
