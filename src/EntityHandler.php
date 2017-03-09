@@ -5,6 +5,7 @@ namespace De\Idrinth\EntityGenerator;
 use PDO;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionProperty;
 
 class EntityHandler
 {
@@ -29,12 +30,14 @@ class EntityHandler
     /**
      *
      * @param PDO $database
+     * @return EntityHandler
      */
     public static function init(PDO $database)
     {
         if (!self::$instance) {
             self::$instance = new self($database);
         }
+        return self::$instance;
     }
 
     /**
@@ -143,7 +146,8 @@ class EntityHandler
         $reflection = new ReflectionClass($entity);
         self::$instance->loadFromDB(
             self::getDocValue($reflection, 'database'),
-            self::getDocValue($reflection, 'table'), $entity
+            self::getDocValue($reflection, 'table'),
+            $entity
         );
     }
 
@@ -188,13 +192,18 @@ class EntityHandler
     {
         $reflection = new ReflectionClass($entity);
         $data = array();
-        foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-            /* @var $method ReflectionMethod */
+        foreach ($reflection->getProperties() as $property) {
+            /* @var $property ReflectionProperty */
+            $methodName = 'get'.strtoupper($property->name{0}).substr($property->name,1);
             if (
-                !$method->isStatic() && $method->getName() === 'get' &&
-                $method->getName() !== 'getAid'
+                !$property->isStatic() &&
+                $property->getName() !== 'aid' &&
+                $property->getName() !== 'entityInitialized' &&
+                $reflection->hasMethod($methodName) &&
+                $reflection->getMethod($methodName)->isPublic() &&
+                !$reflection->getMethod($methodName)->isStatic()
             ) {
-                $data[self::getDocValue($method, 'column')] = $method->invoke($entity);
+                $data[self::getDocValue($property, 'column')] = $reflection->getMethod($methodName)->invoke($entity);
             }
         }
         return self::$instance->writeToDB(

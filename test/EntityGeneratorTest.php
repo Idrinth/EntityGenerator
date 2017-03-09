@@ -58,6 +58,7 @@ class EntityGeneratorTest extends TestCase
 
     /**
      * @depends testCanFindTables
+     * @covers EntityGenerator::createDirectoryIfNotExists
      */
     public function testCanCreateFolder()
     {
@@ -71,6 +72,7 @@ class EntityGeneratorTest extends TestCase
     }
 
     /**
+     * @covers EntityGenerator::run
      * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanGenerateDefaultTableClasses()

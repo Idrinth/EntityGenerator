@@ -43,7 +43,6 @@ class PropertyTest extends TestCase
 
     /**
      *
-     * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanHandleBasicTypes()
     {
@@ -55,30 +54,28 @@ class PropertyTest extends TestCase
     /**
      * @param string $type
      * @param string $expected
-     * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function handleBasicType($type, $expected)
     {
         $property = new Property('test', $type, null, false);
         $this->assertEquals($expected, $property->getType());
         $this->assertEquals('', $property->getTarget());
+        $this->assertEquals(false, $property->isAutoincrement());
     }
 
     /**
      * @param string $type
      * @param string $expected
-     * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function handleFKType($type, $expected)
     {
         $property = new Property('test', $type, $expected, false);
         $this->assertEquals($expected, $property->getType());
         $this->assertEquals($expected, $property->getTarget());
+        $this->assertEquals(false, $property->isAutoincrement());
     }
 
     /**
-     *
-     * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanHandleForeignKeys()
     {
