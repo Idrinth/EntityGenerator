@@ -49,7 +49,7 @@ class EntityHandlerTest extends TestCase
      */
     public function testCanStaticProvideClass()
     {
-        $instance = EntityHandler::provide(self::$class, 2);
+        $instance = EntityHandler2::provide(self::$class, 2);
         $this->assertInstanceOf(self::$class, $instance);
         $this->assertEquals(2, $instance->getAid());
     }
