@@ -1,6 +1,8 @@
 <?php
 
 use De\Idrinth\EntityGenerator\Test\EntityGenerator;
+ini_set('display_errors', 1);
+error_reporting(-1);
 require_once __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'autoload.php';
 $object = new EntityGenerator(
             new PDO('mysql:host:localhost', 'root', ''),
