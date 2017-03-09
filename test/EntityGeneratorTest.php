@@ -6,6 +6,7 @@ use PDO;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_AssertionFailedError;
 use SebastianBergmann\RecursionContext\Exception;
+use De\Idrinth\EntityGenerator\EntityGenerator as EntityGeneratorImplementation
 
 class EntityGeneratorTest extends TestCase
 {
@@ -78,7 +79,12 @@ class EntityGeneratorTest extends TestCase
     public function testCanGenerateDefaultTableClasses()
     {
         try {
-            $this->object->run(array('generator-example'));
+            $object = new EntityGeneratorImplementation(
+                    new PDO('mysql:host:localhost', 'root', ''),
+                    __DIR__.DIRECTORY_SEPARATOR.'{{schema}}',
+                    'De\Idrinth\EntityGenerator\Test'
+                );
+            $object->run(array('generator-example'));
         } catch (Exception $ex) {
             throw new PHPUnit_Framework_AssertionFailedError($ex.'', 1, $ex);
         }
