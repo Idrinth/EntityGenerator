@@ -4,7 +4,6 @@ namespace De\Idrinth\EntityGenerator\Test;
 
 use De\Idrinth\EntityGenerator\EntityNameHandler;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_AssertionFailedError;
 
 class EntityNameHandlerTest extends TestCase
 {
@@ -24,8 +23,6 @@ class EntityNameHandlerTest extends TestCase
     }
 
     /**
-     *
-     * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanHandleUnderscore()
     {
@@ -33,8 +30,6 @@ class EntityNameHandlerTest extends TestCase
     }
 
     /**
-     *
-     * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanHandleMinus()
     {
@@ -42,8 +37,6 @@ class EntityNameHandlerTest extends TestCase
     }
 
     /**
-     * 
-     * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanHandleSlash()
     {
@@ -51,8 +44,6 @@ class EntityNameHandlerTest extends TestCase
     }
 
     /**
-     *
-     * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanHandleBackSlash()
     {
@@ -60,8 +51,6 @@ class EntityNameHandlerTest extends TestCase
     }
 
     /**
-     *
-     * @throws PHPUnit_Framework_AssertionFailedError
      */
     public function testCanHandleDot()
     {
@@ -69,8 +58,6 @@ class EntityNameHandlerTest extends TestCase
     }
 
     /**
-     *
-     * @throws PHPUnit_Framework_AssertionFailedError
      */
     protected function compare($input, $upper, $lower)
     {

@@ -51,7 +51,7 @@ class EntityGenerator
      *
      * @var string
      */
-    protected static $getTablesStatement = "SELECT TABLE_NAME AS name
+    protected static $tablesStatement = "SELECT TABLE_NAME AS name
 FROM information_schema.`TABLES`
 WHERE TABLE_SCHEMA=:schema";
 
@@ -59,7 +59,7 @@ WHERE TABLE_SCHEMA=:schema";
      *
      * @var string
      */
-    protected static $getPropertiesStatement = "
+    protected static $propertiesStatement = "
 SELECT c.COLUMN_NAME AS name,
     c.DATA_TYPE AS type,
     fk.REFERENCED_TABLE_NAME AS target,
@@ -96,8 +96,8 @@ WHERE c.TABLE_SCHEMA=:schema
         $this->basePath = $basePath;
         $this->namespace = trim($namespace, '\\');
         $this->twig = $this->getTwig($twig)->resolveTemplate(self::$templates);
-        $this->getTables  = $database->prepare(self::$getTablesStatement);
-        $this->getProperties = $database->prepare(self::$getPropertiesStatement);
+        $this->getTables  = $database->prepare(self::$tablesStatement);
+        $this->getProperties = $database->prepare(self::$propertiesStatement);
         $this->formatter = new EntityNameHandler();
     }
 
@@ -143,7 +143,8 @@ WHERE c.TABLE_SCHEMA=:schema
     {
         $this->getProperties->execute(array(':schema' => $schema, ':table' => $table));
         $properties = $this->getProperties->fetchAll(
-            PDO::FETCH_CLASS, 'De\Idrinth\EntityGenerator\Property'
+            PDO::FETCH_CLASS,
+            'De\Idrinth\EntityGenerator\Property'
         );
         $this->getProperties->closeCursor();
         return $properties;
@@ -190,11 +191,7 @@ WHERE c.TABLE_SCHEMA=:schema
             return true;
         }
         if (mkdir($path, 0777, true)) {
-            $counter = 0;
-            while(!file_exists($path)&&$counter<5) {
-                $counter++;
-                sleep(1);
-            }
+            sleep(1);
             return file_exists($path);
         }
         throw new UnderflowException($path.' could\'t be created.');
