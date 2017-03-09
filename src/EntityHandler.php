@@ -55,7 +55,11 @@ class EntityHandler
     public function loadFromDB($scheme, $table, BaseEntity $object)
     {
         $result = $this->database->query("SELECT * FROM `$scheme`.`$table` WHERE aid={$object->getAid()}");
+        if(!$result){
+            return;
+        }
         $nameHandler = new EntityNameHandler();
+        $object->entityInitialized = true;
         foreach($result->fetch(PDO::FETCH_ASSOC) as $column => $value) {
             $setter = 'set'.$nameHandler->toUpperCamelCase($column);
             if(method_exists($object, $setter)) {

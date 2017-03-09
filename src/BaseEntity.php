@@ -8,7 +8,7 @@ abstract class BaseEntity
      *
      * @var boolean
      */
-    protected $entityInitialized = false;
+    public $entityInitialized = false;
 
     /**
      * @var int
