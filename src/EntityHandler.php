@@ -114,9 +114,9 @@ class EntityHandler
             . "VALUES (".implode(",", array_keys($replace)).")"
         );
         if ($prep->execute($replace)) {
-            $id = $this->database->lastInsertId();
-            $this->cache[$scheme][$table][$id] = $object;
-            return $id;
+            $aid = $this->database->lastInsertId();
+            $this->cache[$scheme][$table][$aid] = $object;
+            return $aid;
         }
         return false;
     }
@@ -155,31 +155,31 @@ class EntityHandler
      * This loads data into the given entity
      * @param string $scheme
      * @param string $table
-     * @param int $id
+     * @param int $aid
      * @return BaseEntity
      */
-    public function loadInstance($class, $scheme, $table, $id)
+    public function loadInstance($class, $scheme, $table, $aid)
     {
-        if (!isset($this->cache[$scheme][$table][$id])) {
-            $this->cache[$scheme][$table][$id] = new $class($id);
+        if (!isset($this->cache[$scheme][$table][$aid])) {
+            $this->cache[$scheme][$table][$aid] = new $class($aid);
         }
-        return $this->cache[$scheme][$table][$id];
+        return $this->cache[$scheme][$table][$aid];
     }
 
     /**
      * This loads data into the given entity
      * @param string $class
-     * @param int $id
+     * @param int $aid
      * @return BaseEntity $entity
      */
-    public static function provide($class, $id)
+    public static function provide($class, $aid)
     {
         $reflection = new ReflectionClass($class);
         return self::$instance->loadInstance(
                 $class,
                 self::getDocValue($reflection, 'database'),
                 self::getDocValue($reflection, 'table'),
-                $id
+                $aid
         );
     }
 
@@ -194,7 +194,7 @@ class EntityHandler
         $data = array();
         foreach ($reflection->getProperties() as $property) {
             /* @var $property ReflectionProperty */
-            $methodName = 'get'.strtoupper($property->name{0}).substr($property->name,1);
+            $methodName = 'get'.strtoupper($property->name{0}).substr($property->name, 1);
             if (
                 !$property->isStatic() &&
                 $property->getName() !== 'aid' &&
