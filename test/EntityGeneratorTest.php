@@ -94,7 +94,8 @@ class EntityGeneratorTest extends TestCase
         foreach (array('Element', 'ElementList') as $class) {
             if (!is_file($base.$class.'.php')) {
                 throw new PHPUnit_Framework_AssertionFailedError(
-                $class.' has no file.', 3
+                    $class.' has no file.',
+                    3
                 );
             }
         }
