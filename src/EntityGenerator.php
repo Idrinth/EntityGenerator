@@ -190,6 +190,11 @@ WHERE c.TABLE_SCHEMA=:schema
             return true;
         }
         if (mkdir($path, 0777, true)) {
+            $counter = 0;
+            while(!file_exists($path)&&$counter<5) {
+                $counter++;
+                sleep(1);
+            }
             return file_exists($path);
         }
         throw new UnderflowException($path.' could\'t be created.');
