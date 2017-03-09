@@ -96,9 +96,9 @@ WHERE c.TABLE_SCHEMA=:schema
         $this->basePath = $basePath;
         $this->namespace = trim($namespace, '\\');
         $this->twig = $this->getTwig($twig)->resolveTemplate(self::$templates);
-        $this->getTables = $database->prepare(self::$getTablesStatement);
+        $this->getTables  = $database->prepare(self::$getTablesStatement);
         $this->getProperties = $database->prepare(self::$getPropertiesStatement);
-        $this->formatter = new EntityTwig();
+        $this->formatter = new EntityNameHandler();
     }
 
     /**
