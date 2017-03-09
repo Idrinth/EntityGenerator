@@ -6,7 +6,7 @@ use PDO;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_AssertionFailedError;
 use SebastianBergmann\RecursionContext\Exception;
-use De\Idrinth\EntityGenerator\EntityGenerator as EntityGeneratorImplementation
+use De\Idrinth\EntityGenerator\EntityGenerator as EntityGeneratorImplementation;
 
 class EntityGeneratorTest extends TestCase
 {
