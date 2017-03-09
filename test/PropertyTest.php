@@ -61,7 +61,7 @@ class PropertyTest extends TestCase
         $this->assertEquals($expected, $property->getType());
         $this->assertEquals('', $property->getTarget());
         $this->assertEquals(false, $property->isAutoincrement());
-        $this->assertEquals(test, $property->getName());
+        $this->assertEquals('test', $property->getName());
     }
 
     /**
@@ -74,7 +74,7 @@ class PropertyTest extends TestCase
         $this->assertEquals($expected, $property->getType());
         $this->assertEquals($expected, $property->getTarget());
         $this->assertEquals(false, $property->isAutoincrement());
-        $this->assertEquals(test, $property->getName());
+        $this->assertEquals('test', $property->getName());
     }
 
     /**
