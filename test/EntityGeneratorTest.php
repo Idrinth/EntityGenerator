@@ -73,6 +73,35 @@ class EntityGeneratorTest extends TestCase
     }
 
     /**
+     * @depends testCanFindTables
+     * @covers EntityGeneratorImplementation::write
+     */
+    public function testWriteClass()
+    {
+        $this->assertGreaterThan(
+            0,
+            $this->object->write(
+                __DIR__.DIRECTORY_SEPARATOR.'GeneratorExample'.DIRECTORY_SEPARATOR.'Entity'.DIRECTORY_SEPARATOR.'Element.php',
+                array(
+                    'table' => 'element',
+                    'schema' => 'entity-generator',
+                    'namespace' => 'De\Idrinth\EntityGenerator\Test\GeneratorExample\Entity',
+                    'properties' => $this->object->getTableProperties('element', 'generator-example')
+                )
+            )
+        );
+    }
+
+    /**
+     * @depends testWriteClass
+     * @covers EntityGeneratorImplementation::buildClass
+     */
+    public function testCanBuildClass()
+    {
+        $this->object->buildClass('element', 'generator-example');
+    }
+
+    /**
      * @covers EntityGeneratorImplementation::run
      * @throws PHPUnit_Framework_AssertionFailedError
      */

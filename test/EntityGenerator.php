@@ -39,4 +39,25 @@ class EntityGenerator extends EntityGeneratorImplementation
     {
         return parent::createDirectoryIfNotExists($path);
     }
+
+    /**
+     *
+     * @param string $table
+     * @param string $schema
+     */
+    public function buildClass($table, $schema)
+    {
+        parent::buildClass($table, $schema);
+    }
+
+    /**
+     *
+     * @param string $path
+     * @param array $data
+     * @return boolean
+     */
+    public function write($path, $data)
+    {
+        return parent::write($path, $data);
+    }
 }
