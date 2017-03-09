@@ -16,8 +16,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "*",
-        "codacy/coverage": "dev-master",
-        "mikey179/vfsStream": "*"
+        "codacy/coverage": "dev-master"
     },
     "autoload": {
         "psr-4": {
