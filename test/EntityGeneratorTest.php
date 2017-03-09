@@ -2,11 +2,13 @@
 
 namespace De\Idrinth\EntityGenerator\Test;
 
+use De\Idrinth\EntityGenerator\EntityGenerator as EntityGeneratorImplementation;
+use org\bovigo\vfs\vfsStreamDirectory;
+use org\bovigo\vfs\vfsStreamWrapper;
 use PDO;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_AssertionFailedError;
 use SebastianBergmann\RecursionContext\Exception;
-use De\Idrinth\EntityGenerator\EntityGenerator as EntityGeneratorImplementation;
 
 class EntityGeneratorTest extends TestCase
 {
@@ -33,6 +35,8 @@ class EntityGeneratorTest extends TestCase
             'De\Idrinth\EntityGenerator\Test'
         );
         $this->path = __DIR__.DIRECTORY_SEPARATOR.'GeneratorExample'.DIRECTORY_SEPARATOR.'Entity';
+        vfsStreamWrapper::register();
+        vfsStreamWrapper::setRoot(new vfsStreamDirectory(__DIR__));
     }
 
     /**
@@ -111,6 +115,7 @@ class EntityGeneratorTest extends TestCase
      */
     public function testCanGenerateDefaultTableClasses()
     {
+        vfsStreamWrapper::unregister();
         try {
             $object = new EntityGeneratorImplementation(
                     new PDO('mysql:host:localhost', 'root', ''),
