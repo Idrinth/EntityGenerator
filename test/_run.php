@@ -7,4 +7,4 @@ $object = new EntityGenerator(
             __DIR__.DIRECTORY_SEPARATOR.'{{schema}}',
             'De\Idrinth\EntityGenerator\Test'
         );
-$object->run('generator-example');
+$object->run(array('generator-example'));
