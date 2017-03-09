@@ -19,4 +19,15 @@ class EntityTwigTest extends TestCase
         $this->assertCount(0, $extension->getOperators());
         $this->assertCount(0, $extension->getNodeVisitors());
     }
+
+    /**
+     *@depends testOnlyProvidesFilters
+     */
+    public function testFiltersAreFilters()
+    {
+        $extension = new EntityTwig();
+        foreach($extension->getFilters() as $filter) {
+            $this->assertInstanceOf('Twig_SimpleFilter', $filter);
+        }
+    }
 }

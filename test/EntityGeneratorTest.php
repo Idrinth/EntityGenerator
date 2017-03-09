@@ -15,6 +15,11 @@ class EntityGeneratorTest extends TestCase
      * @var EntityGenerator
      */
     protected $object;
+    /**
+     *
+     * @var string
+     */
+    protected $path;
 
     /**
      * provide EntityGenerator
@@ -27,6 +32,7 @@ class EntityGeneratorTest extends TestCase
             __DIR__.DIRECTORY_SEPARATOR.'{{schema}}',
             'De\Idrinth\EntityGenerator\Test'
         );
+        $this->path = __DIR__.DIRECTORY_SEPARATOR.'GeneratorExample'.DIRECTORY_SEPARATOR.'Entity';
     }
 
     /**
@@ -63,10 +69,9 @@ class EntityGeneratorTest extends TestCase
      */
     public function testCanCreateFolder()
     {
-        $path = __DIR__.DIRECTORY_SEPARATOR.'GeneratorExample'.DIRECTORY_SEPARATOR.'Entity';
-        if (!$this->object->createDirectoryIfNotExists($path)) {
+        if (!$this->object->createDirectoryIfNotExists($this->path)) {
             throw new PHPUnit_Framework_AssertionFailedError(
-                'can\'t create path '.$path,
+                'can\'t create path '.$this->path,
                 4
             );
         }
@@ -80,7 +85,7 @@ class EntityGeneratorTest extends TestCase
     {
         $this->assertTrue(
             $this->object->write(
-                __DIR__.DIRECTORY_SEPARATOR.'GeneratorExample'.DIRECTORY_SEPARATOR.'Entity'.DIRECTORY_SEPARATOR.'Element.php',
+                $this->path.DIRECTORY_SEPARATOR.'Element.php',
                 array(
                     'table' => 'element',
                     'schema' => 'entity-generator',
@@ -124,7 +129,7 @@ class EntityGeneratorTest extends TestCase
      */
     public function testDoFilesExist()
     {
-        $base = __DIR__.DIRECTORY_SEPARATOR.'GeneratorExample'.DIRECTORY_SEPARATOR.'Entity'.DIRECTORY_SEPARATOR;
+        $base = $this->path.DIRECTORY_SEPARATOR;
         foreach (array('Element', 'ElementList') as $class) {
             if (!is_file($base.$class.'.php')) {
                 throw new PHPUnit_Framework_AssertionFailedError(
