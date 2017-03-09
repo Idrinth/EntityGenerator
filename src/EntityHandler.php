@@ -58,7 +58,7 @@ class EntityHandler
     public function loadFromDB($scheme, $table, BaseEntity $object)
     {
         $result = $this->database->query("SELECT * FROM `$scheme`.`$table` WHERE aid={$object->getAid()}");
-        if (!$result) {
+        if (!$result || $result->rowCount() !== 1) {
             return;
         }
         $nameHandler = new EntityNameHandler();
@@ -80,7 +80,8 @@ class EntityHandler
      * @param string[] $data
      * @return boolean
      */
-    protected function updateEntity($scheme, $table, BaseEntity $object, $data) {
+    protected function updateEntity($scheme, $table, BaseEntity $object, $data)
+    {
         $string  = array();
         $replace = array();
         foreach ($data as $key => $value) {
@@ -103,7 +104,8 @@ class EntityHandler
      * @param string[] $data
      * @return int|boolean
      */
-    protected function createEntity($scheme, $table, BaseEntity $object, $data) {
+    protected function createEntity($scheme, $table, BaseEntity $object, $data)
+    {
         $replace = array();
         foreach ($data as $key => $value) {
             $replace[':'.$key] = $value;

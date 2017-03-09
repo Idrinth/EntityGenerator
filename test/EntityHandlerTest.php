@@ -83,7 +83,7 @@ class EntityHandlerTest extends TestCase
     /**
      * @depends testCanStoreClass
      */
-    public function testCanNotStorewrongClass()
+    public function testCanNotStoreWrongClass()
     {
         $this->assertEquals(false,
             $this->object->writeToDB(
@@ -103,6 +103,16 @@ class EntityHandlerTest extends TestCase
         $entity = new ElementList(1);
         $this->object->loadFromDB('generator-example', 'element_list', $entity);
         $this->assertEquals('test', $entity->getName());
+    }
+
+    /**
+     * @depends testCanLoadClass
+     */
+    public function testCanNotLoadMissingId()
+    {
+        $entity = new ElementList(17);
+        $this->object->loadFromDB('generator-example', 'element_list', $entity);
+        $this->assertEquals(false, $entity->entityInitialized);
     }
 
     /**
