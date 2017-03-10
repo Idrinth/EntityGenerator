@@ -85,7 +85,7 @@ class EntityHandlerTest extends TestCase
      */
     public function testCanNotStoreWrongClass()
     {
-        $this->assertEquals(false,
+        $this->assertFalse(
             $this->object->writeToDB(
                 'generator-example',
                 'missing_element_list',
@@ -112,7 +112,7 @@ class EntityHandlerTest extends TestCase
     {
         $entity = new ElementList(17);
         $this->object->loadFromDB('generator-example', 'element_list', $entity);
-        $this->assertEquals(false, $entity->entityInitialized);
+        $this->assertFalse($entity->entityInitialized);
     }
 
     /**
@@ -133,7 +133,7 @@ class EntityHandlerTest extends TestCase
      */
     public function testCanUpdateClass()
     {
-        $this->assertEquals(true,
+        $this->assertTrue(
             $this->object->writeToDB('generator-example', 'element_list',
                 new ElementList(1),
                 array('name' => 'test-static')
@@ -151,6 +151,6 @@ class EntityHandlerTest extends TestCase
     {
         $entity = new ElementList(2);
         $entity->setName('test2-static');
-        $this->assertEquals(true, EntityHandler2::store($entity));
+        $this->assertTrue(EntityHandler2::store($entity));
     }
 }

@@ -5,7 +5,6 @@ namespace De\Idrinth\EntityGenerator\Test;
 use De\Idrinth\EntityGenerator\EntityGenerator as EntityGeneratorImplementation;
 use PDO;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_AssertionFailedError;
 use SebastianBergmann\RecursionContext\Exception;
 
 class EntityGeneratorTest extends TestCase
@@ -40,8 +39,7 @@ class EntityGeneratorTest extends TestCase
      */
     public function testCanFindTables()
     {
-        $list = $this->object->getTablesResult('generator-example');
-        $this->assertEquals(2, count($list));
+        $this->assertCount(2, $this->object->getTablesResult('generator-example'));
     }
 
     /**
@@ -69,12 +67,7 @@ class EntityGeneratorTest extends TestCase
      */
     public function testCanCreateFolder()
     {
-        if (!$this->object->createDirectoryIfNotExists($this->path)) {
-            throw new PHPUnit_Framework_AssertionFailedError(
-                'can\'t create path '.$this->path,
-                4
-            );
-        }
+        $this->assertTrue($this->object->createDirectoryIfNotExists($this->path));
     }
 
     /**
@@ -102,12 +95,17 @@ class EntityGeneratorTest extends TestCase
      */
     public function testCanBuildClass()
     {
-        $this->object->buildClass('element', 'generator-example');
+        try {
+            $this->object->buildClass('element', 'generator-example');
+            $this->assertTrue(true);
+        } catch (Exception $ex) {
+            $this->assertTrue(false);
+        }
     }
 
     /**
      * @covers EntityGeneratorImplementation::run
-     * @throws PHPUnit_Framework_AssertionFailedError
+     * @large
      */
     public function testCanGenerateDefaultTableClasses()
     {
@@ -118,40 +116,32 @@ class EntityGeneratorTest extends TestCase
                     'De\Idrinth\EntityGenerator\Test'
                 );
             $object->run(array('generator-example'));
+            $this->assertTrue(true);
         } catch (Exception $ex) {
-            throw new PHPUnit_Framework_AssertionFailedError($ex.'', 1, $ex);
+            $this->assertTrue(false);
         }
     }
 
     /**
      * @depends testCanGenerateDefaultTableClasses
-     * @throws PHPUnit_Framework_AssertionFailedError
+     * @large
      */
     public function testDoFilesExist()
     {
         $base = $this->path.DIRECTORY_SEPARATOR;
         foreach (array('Element', 'ElementList') as $class) {
-            if (!is_file($base.$class.'.php')) {
-                throw new PHPUnit_Framework_AssertionFailedError(
-                    $class.' has no file.',
-                    3
-                );
-            }
+            $this->assertTrue(is_file($base.$class.'.php'));
         }
     }
 
     /**
      * @depends testDoFilesExist
-     * @throws PHPUnit_Framework_AssertionFailedError
+     * @large
      */
     public function testDoClassesExist()
     {
         foreach (array('Element', 'ElementList') as $class) {
-            if (!class_exists('De\Idrinth\EntityGenerator\Test\GeneratorExample\Entity\\'.$class)) {
-                throw new PHPUnit_Framework_AssertionFailedError(
-                $class.' couldn\'t be autoloaded.', 2
-                );
-            }
+            $this->assertTrue(class_exists('De\Idrinth\EntityGenerator\Test\GeneratorExample\Entity\\'.$class));
         }
     }
 }

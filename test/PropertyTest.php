@@ -60,7 +60,7 @@ class PropertyTest extends TestCase
         $property = new Property('test', $type, null, false);
         $this->assertEquals($expected, $property->getType());
         $this->assertEquals('', $property->getTarget());
-        $this->assertEquals(false, $property->isAutoincrement());
+        $this->assertFalse($property->isAutoincrement());
         $this->assertEquals('test', $property->getName());
     }
 
@@ -73,7 +73,7 @@ class PropertyTest extends TestCase
         $property = new Property('test', $type, $expected, false);
         $this->assertEquals($expected, $property->getType());
         $this->assertEquals($expected, $property->getTarget());
-        $this->assertEquals(false, $property->isAutoincrement());
+        $this->assertFalse($property->isAutoincrement());
         $this->assertEquals('test', $property->getName());
     }
 
@@ -84,5 +84,15 @@ class PropertyTest extends TestCase
         foreach (array_keys(self::$types) as $from) {
             $this->handleFKType($from, 'my-key');
         }
+    }
+
+    /**
+     */
+    public function testCanHandleAutoincrement()
+    {
+        $property = new Property('test', 'int', '', false);
+        $this->assertFalse($property->isAutoincrement());
+        $property = new Property('test', 'int', '', true);
+        $this->assertTrue($property->isAutoincrement());
     }
 }
