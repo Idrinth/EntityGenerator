@@ -15,7 +15,7 @@ before_script:
   - composer update
   - mysql < test/sql/generator-example.sql
 script:
-  - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.0" ]]; then phpunit --testdox --bootstrap vendor/autoload.php test/ ; fi
-  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then phpunit --repeat 5 --debug --verbose --coverage-clover /tmp/coverage.xml --whitelist src/ --bootstrap vendor/autoload.php test/ ; fi
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.0" ]]; then phpunit --testdox --coverage-text --bootstrap vendor/autoload.php test/ ; fi
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then phpunit --testdox --coverage-clover /tmp/coverage.xml --whitelist src/ --bootstrap vendor/autoload.php test/ ; fi
 after_success:
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then php vendor/bin/codacycoverage clover /tmp/coverage.xml ; fi
