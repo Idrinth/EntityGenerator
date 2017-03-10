@@ -27,7 +27,9 @@ abstract class BaseEntity
     public function store()
     {
         if (!$this->entityInitialized && $this->aid) {
+            // @codeCoverageIgnoreStart
             $this->initEntity();
+            // @codeCoverageIgnoreEnd
         }
         $ret = EntityHandlerFactory::get()->store($this);
         if (!$this->aid && is_numeric($ret)) {
