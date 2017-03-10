@@ -44,10 +44,11 @@ class EntityGenerator extends EntityGeneratorImplementation
      *
      * @param string $table
      * @param string $schema
+     * @return boolean
      */
     public function buildClass($table, $schema)
     {
-        parent::buildClass($table, $schema);
+        return parent::buildClass($table, $schema);
     }
 
     /**

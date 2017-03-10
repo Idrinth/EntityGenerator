@@ -95,12 +95,7 @@ class EntityGeneratorTest extends TestCase
      */
     public function testCanBuildClass()
     {
-        try {
-            $this->object->buildClass('element', 'generator-example');
-            $this->assertTrue(true);
-        } catch (Exception $ex) {
-            $this->assertTrue(false);
-        }
+        $this->assertTrue($this->object->buildClass('element', 'generator-example'));
     }
 
     /**
@@ -109,17 +104,12 @@ class EntityGeneratorTest extends TestCase
      */
     public function testCanGenerateDefaultTableClasses()
     {
-        try {
-            $object = new EntityGeneratorImplementation(
-                    new PDO('mysql:host:localhost', 'root', ''),
-                    __DIR__.DIRECTORY_SEPARATOR.'{{schema}}',
-                    'De\Idrinth\EntityGenerator\Test'
-                );
-            $object->run(array('generator-example'));
-            $this->assertTrue(true);
-        } catch (Exception $ex) {
-            $this->assertTrue(false);
-        }
+        $object = new EntityGeneratorImplementation(
+                new PDO('mysql:host:localhost', 'root', ''),
+                __DIR__.DIRECTORY_SEPARATOR.'{{schema}}',
+                'De\Idrinth\EntityGenerator\Test'
+            );
+        $this->assertTrue($object->run(array('generator-example')));
     }
 
     /**

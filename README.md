@@ -11,4 +11,3 @@ Codacy:
 Codeclimate:
 [![Issue Count](https://lima.codeclimate.com/github/Idrinth/EntityGenerator/badges/issue_count.svg)](https://lima.codeclimate.com/github/Idrinth/EntityGenerator)
 [![Code Climate](https://lima.codeclimate.com/github/Idrinth/EntityGenerator/badges/gpa.svg)](https://lima.codeclimate.com/github/Idrinth/EntityGenerator)
-[![Test Coverage](https://lima.codeclimate.com/github/Idrinth/EntityGenerator/badges/coverage.svg)](https://lima.codeclimate.com/github/Idrinth/EntityGenerator/coverage)

@@ -7,7 +7,6 @@ use PDOStatement;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
 use Twig_Template;
-use UnderflowException;
 
 class EntityGenerator
 {
@@ -120,17 +119,19 @@ WHERE c.TABLE_SCHEMA=:schema
     /**
      *
      * @param string[] $schemas
-     * @return void
+     * @return boolean
      */
     public function run(array $schemas)
     {
+        $status = true;
         foreach ($schemas as $schema) {
             $this->getTables->execute(array(':schema' => $schema));
             foreach ($this->getTables->fetchAll(PDO::FETCH_OBJ) as $table) {
-                $this->buildClass($table->name, $schema);
+                $status = $status && $this->buildClass($table->name, $schema);
             }
             $this->getTables->closeCursor();
         }
+        return $status;
     }
 
     /**
@@ -154,8 +155,7 @@ WHERE c.TABLE_SCHEMA=:schema
      *
      * @param type $table
      * @param string $schema
-     * @return type
-     * @throws UnderflowException
+     * @return boolean
      */
     protected function buildClass($table, $schema)
     {
@@ -165,7 +165,9 @@ WHERE c.TABLE_SCHEMA=:schema
                 $this->formatter->toUpperCamelCase($schema),
                 $this->basePath
             ).DIRECTORY_SEPARATOR.'Entity';
-        $this->createDirectoryIfNotExists($path);
+        if(!$this->createDirectoryIfNotExists($path)) {
+            return false;
+        }
         if (!$this->write(
                 $path.DIRECTORY_SEPARATOR.$class.'.php',
                 array(
@@ -175,26 +177,22 @@ WHERE c.TABLE_SCHEMA=:schema
                 'properties' => $this->getTableProperties($table, $schema)
                 )
             )) {
-            throw new UnderflowException($path.$class.'.php was not writeable.');
+            return false;
         }
+        return true;
     }
 
     /**
      *
      * @param string $path
-     * @return void
-     * @throws UnderflowException
+     * @return boolean
      */
     protected function createDirectoryIfNotExists($path)
     {
-        if (file_exists($path)) {
+        if (is_dir($path)) {
             return true;
         }
-        if (mkdir($path, 0777, true)) {
-            sleep(1);
-            return file_exists($path);
-        }
-        throw new UnderflowException($path.' could\'t be created.');
+        return mkdir($path, 0777, true) && is_dir($path);
     }
 
     /**
