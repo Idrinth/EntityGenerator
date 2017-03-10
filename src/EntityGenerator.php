@@ -189,10 +189,13 @@ WHERE c.TABLE_SCHEMA=:schema
      */
     protected function createDirectoryIfNotExists($path)
     {
-        if (is_dir($path)) {
-            return true;
+        $counter = 0;
+        while (!is_dir($path) && $counter < 10) {
+            mkdir($path, 0777, true);
+            $counter++;
+            sleep(1);
         }
-        return mkdir($path, 0777, true) && is_dir($path);
+        return is_dir($path);
     }
 
     /**
