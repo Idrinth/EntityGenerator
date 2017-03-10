@@ -27,10 +27,10 @@ abstract class BaseEntity
     public function store()
     {
         if (!$this->entityInitialized && $this->aid) {
-            $this->initialize();
+            $this->initEntity();
         }
         $ret = EntityHandlerFactory::get()->store($this);
-        if(!$this->aid && is_numeric($ret)) {
+        if (!$this->aid && is_numeric($ret)) {
             $this->aid = $ret;
         }
         return (bool) $ret;

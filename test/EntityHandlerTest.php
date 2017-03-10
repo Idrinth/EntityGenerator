@@ -82,6 +82,18 @@ class EntityHandlerTest extends AbstractTestCase
 
     /**
      * @depends testCanStoreClass
+     * @depends testCanLoadClass
+     * @depends testCanProvideClass
+     */
+    public function testNotDuplicateClass()
+    {
+        $entity = new ElementList();
+        $entity->setName('test1');
+        $this->assertFalse($this->getHandler()->store($entity));
+    }
+
+    /**
+     * @depends testCanStoreClass
      */
     public function testCanChangeClass()
     {

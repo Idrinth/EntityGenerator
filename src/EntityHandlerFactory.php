@@ -8,9 +8,9 @@ class EntityHandlerFactory
 {
     /**
      *
-     * @var string
+     * @var EntityHandler
      */
-    protected static $class = 'De\Idrinth\EntityGenerator\EntityHandler';
+    protected static $instance;
 
     /**
      *
@@ -19,9 +19,9 @@ class EntityHandlerFactory
      */
     public static function init(PDO $database)
     {
-        if (!isset($GLOBALS[self::$class])) {
+        if (!self::$instance) {
             // @codeCoverageIgnoreStart
-            $GLOBALS[self::$class] = new EntityHandler($database);
+            self::$instance = new EntityHandler($database);
             // @codeCoverageIgnoreEnd
         }
         return self::get();
@@ -33,7 +33,7 @@ class EntityHandlerFactory
      */
     public static function get()
     {
-        return isset($GLOBALS[self::$class])?$GLOBALS[self::$class]:null;
+        return self::$instance;
     }
 
     /**
@@ -41,9 +41,9 @@ class EntityHandlerFactory
      */
     public static function reset()
     {
-        if(isset($GLOBALS[self::$class])) {
-            unset($GLOBALS[self::$class]);
+        if (self::$instance) {
+            self::$instance = null;
         }
-        return !isset($GLOBALS[self::$class]);
+        return !self::$instance;
     }
 }
