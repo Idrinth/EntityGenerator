@@ -63,7 +63,7 @@ class EntityGeneratorTest extends TestCase
 
     /**
      * @depends testCanFindTables
-     * @covers EntityGenerator<extended>::createDirectoryIfNotExists
+     * @covers \De\Idrinth\EntityGenerator\Test\EntityGenerator<extended>::createDirectoryIfNotExists
      */
     public function testCanCreateFolder()
     {
@@ -72,7 +72,7 @@ class EntityGeneratorTest extends TestCase
 
     /**
      * @depends testCanFindTables
-     * @covers EntityGenerator<extended>::write
+     * @covers \De\Idrinth\EntityGenerator\Test\EntityGenerator<extended>::write
      */
     public function testWriteClass()
     {
@@ -91,7 +91,7 @@ class EntityGeneratorTest extends TestCase
 
     /**
      * @depends testWriteClass
-     * @covers EntityGenerator<extended>::buildClass
+     * @covers \De\Idrinth\EntityGenerator\Test\EntityGenerator<extended>::buildClass
      */
     public function testCanBuildClass()
     {
@@ -99,7 +99,7 @@ class EntityGeneratorTest extends TestCase
     }
 
     /**
-     * @covers EntityGenerator<extended>::run
+     * @covers \De\Idrinth\EntityGenerator\Test\EntityGenerator<extended>::run
      * @large
      */
     public function testCanGenerateDefaultTableClasses()
