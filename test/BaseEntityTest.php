@@ -35,4 +35,16 @@ class BaseEntityTest extends AbstractTestCase
         $element = new Element(1);
         $this->assertEquals('base-entity-test', $element->getName());
     }
+
+    /**
+     * @depends testCanStoreClass
+     */
+    public function testUpdateClass()
+    {
+        $element = new Element(1);
+        $this->assertEquals('base-entity-test', $element->getName());
+        $this->assertTrue($element->isEntityInitialized());
+        $element->setName('base-test');
+        $this->assertTrue($element->store());
+    }
 }
