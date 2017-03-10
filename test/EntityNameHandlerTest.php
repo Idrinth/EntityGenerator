@@ -3,9 +3,8 @@
 namespace De\Idrinth\EntityGenerator\Test;
 
 use De\Idrinth\EntityGenerator\EntityNameHandler;
-use PHPUnit\Framework\TestCase;
 
-class EntityNameHandlerTest extends TestCase
+class EntityNameHandlerTest extends AbstractTestCase
 {
     /**
      *

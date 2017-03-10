@@ -17,7 +17,6 @@ class Element extends BaseEntity {
     **/
     protected $aid;
 
-
     /**
     * @return int
     **/
@@ -31,7 +30,6 @@ class Element extends BaseEntity {
     **/
     protected $name;
 
-
     /**
     * @return string
     **/
@@ -43,7 +41,7 @@ class Element extends BaseEntity {
     /**
     * @param string
     **/
-    public function setName( $param) {
+    public function setName($param) {
         $this->initEntity();
         $this->name = $param;
     }

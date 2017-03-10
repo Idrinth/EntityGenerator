@@ -5,9 +5,8 @@ namespace De\Idrinth\EntityGenerator\Test;
 use De\Idrinth\EntityGenerator\EntityHandler;
 use De\Idrinth\EntityGenerator\Test\GeneratorExample\Entity\ElementList;
 use PDO;
-use PHPUnit\Framework\TestCase;
 
-class EntityHandlerTest extends TestCase
+class EntityHandlerTest extends AbstractTestCase
 {
     /**
      *
@@ -16,15 +15,17 @@ class EntityHandlerTest extends TestCase
     protected static $class='De\Idrinth\EntityGenerator\Test\Test\Entity\Element';
 
     /**
+     *
+     * @var int
+     */
+    protected $aid=1;
+
+    /**
      * @return EntityHandler
      */
     protected function getHandler()
     {
-        return new EntityHandler(new PDO(
-            'mysql:host:localhost',
-            'root',
-            ''
-        ));
+        return new EntityHandler($this->database);
     }
 
     /**
@@ -43,7 +44,8 @@ class EntityHandlerTest extends TestCase
     {
         $entity = new ElementList();
         $entity->setName('test');
-        $this->assertEquals(1, $this->getHandler()->store($entity));
+        $this->aid = $this->getHandler()->store($entity);
+        $this->assertGreaterThan(0, $this->aid);
     }
 
     /**
@@ -51,7 +53,7 @@ class EntityHandlerTest extends TestCase
      */
     public function testCanLoadClass()
     {
-        $entity = new ElementList(1);
+        $entity = new ElementList($this->aid);
         $this->getHandler()->load($entity);
         $this->assertEquals('test', $entity->getName());
     }
@@ -61,9 +63,9 @@ class EntityHandlerTest extends TestCase
      */
     public function testCanNotLoadMissingId()
     {
-        $entity = new ElementList(17);
+        $entity = new ElementList($this->aid+17);
         $this->getHandler()->load($entity);
-        $this->assertFalse($entity->getEntityInitialized());
+        $this->assertFalse($entity->isEntityInitialized());
     }
 
     /**
@@ -73,7 +75,7 @@ class EntityHandlerTest extends TestCase
      */
     public function testCanUpdateClass()
     {
-        $entity = new ElementList(1);
+        $entity = new ElementList($this->aid);
         $entity->setName('test1');
         $this->assertTrue($this->getHandler()->store($entity));
     }
@@ -83,7 +85,7 @@ class EntityHandlerTest extends TestCase
      */
     public function testCanChangeClass()
     {
-        $entity = new ElementList(1);
+        $entity = new ElementList($this->aid);
         $this->getHandler()->load($entity);
         $this->assertEquals('test1', $entity->getName());
     }

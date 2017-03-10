@@ -48,7 +48,7 @@ class DocBlockHelper
      */
     public function isAutoincrement(ReflectionProperty $reflection)
     {
-        return (bool) preg_match("/@autoincrement\s/",$reflection->getDocComment());
+        return (bool) preg_match("/@autoincrement\s/", $reflection->getDocComment());
     }
 
     /**

@@ -3,10 +3,8 @@
 namespace De\Idrinth\EntityGenerator\Test;
 
 use De\Idrinth\EntityGenerator\EntityHandlerFactory;
-use PDO;
-use PHPUnit\Framework\TestCase;
 
-class EntityHandlerFactoryTest extends TestCase
+class EntityHandlerFactoryTest extends AbstractTestCase
 {
     /*+
      * @var string
@@ -15,8 +13,17 @@ class EntityHandlerFactoryTest extends TestCase
 
     /**
      */
+    public function testReset()
+    {
+        $this->assertTrue(EntityHandlerFactory::reset());
+    }
+
+    /**
+     * @depends testReset
+     */
     public function testHasToBeInitialised()
     {
+        EntityHandlerFactory::reset();
         $this->assertNull(EntityHandlerFactory::get());
     }
 
@@ -25,16 +32,7 @@ class EntityHandlerFactoryTest extends TestCase
      */
     public function testCanInitialize()
     {
-        $this->assertInstanceOf(
-            self::$class,
-            EntityHandlerFactory::init(
-                new PDO(
-                    'mysql:host:localhost',
-                    'root',
-                    ''
-                )
-            )
-        );
+        $this->assertInstanceOf(self::$class, EntityHandlerFactory::init($this->database));
     }
 
     /**

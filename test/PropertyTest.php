@@ -3,7 +3,6 @@
 namespace De\Idrinth\EntityGenerator\Test;
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_AssertionFailedError;
 
 class PropertyTest extends TestCase
 {

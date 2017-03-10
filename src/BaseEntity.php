@@ -22,23 +22,32 @@ abstract class BaseEntity
     }
 
     /**
-    *
+    * @return boolean
     */
     public function store()
     {
-        if ($this->entityInitialized) {
-            EntityHandlerFactory::get()->store($this);
+        if (!$this->entityInitialized && $this->aid) {
+            $this->initialize();
         }
+        $ret = EntityHandlerFactory::get()->store($this);
+        if(!$this->aid && is_numeric($ret)) {
+            $this->aid = $ret;
+        }
+        return (bool) $ret;
     }
 
     /**
-     * 
+     *
      * @return boolean
      */
-    public function getEntityInitialized()
+    public function isEntityInitialized()
     {
         return $this->entityInitialized;
     }
 
+    /**
+     *
+     */
+    abstract protected function initEntity();
 
 }

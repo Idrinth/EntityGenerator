@@ -3,10 +3,9 @@
 namespace De\Idrinth\EntityGenerator\Test;
 
 use De\Idrinth\EntityGenerator\DocBlockHelper;
-use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-class DocBlockHelperTest extends TestCase
+class DocBlockHelperTest extends AbstractTestCase
 {
     /*+
      * @var DocBlockHelper

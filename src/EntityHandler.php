@@ -35,9 +35,14 @@ class EntityHandler
     /**
      *
      * @param PDO $database
+     * @param DocBlockHelper $handler
+     * @param EntityNameHandler $names
      */
-    public function __construct(PDO $database, DocBlockHelper $handler=null,EntityNameHandler $names=null)
-    {
+    public function __construct(
+        PDO $database,
+        DocBlockHelper $handler = null,
+        EntityNameHandler $names = null
+    ) {
         $this->database = $database;
         $this->handler = $handler?$handler:new DocBlockHelper();
         $this->names = $names?$names:new EntityNameHandler();
