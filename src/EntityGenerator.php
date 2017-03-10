@@ -70,7 +70,6 @@ LEFT JOIN information_schema.`KEY_COLUMN_USAGE` AS fk
     AND c.COLUMN_NAME=fk.COLUMN_NAME
     AND c.TABLE_SCHEMA=fk.REFERENCED_TABLE_SCHEMA
 WHERE c.TABLE_SCHEMA=:schema
-    AND c.COLUMN_NAME != 'aid'
     AND c.TABLE_NAME=:table";
 
     /**

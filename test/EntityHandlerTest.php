@@ -2,9 +2,9 @@
 
 namespace De\Idrinth\EntityGenerator\Test;
 
+use De\Idrinth\EntityGenerator\EntityHandler;
 use De\Idrinth\EntityGenerator\Test\GeneratorExample\Entity\ElementList;
 use PDO;
-use De\Idrinth\EntityGenerator\EntityHandler as EntityHandler2;
 use PHPUnit\Framework\TestCase;
 
 class EntityHandlerTest extends TestCase
@@ -14,33 +14,24 @@ class EntityHandlerTest extends TestCase
      * @var string
      */
     protected static $class='De\Idrinth\EntityGenerator\Test\GeneratorExample\Entity\ElementList';
-    /**
-     *
-     * @var EntityHandler
-     */
-    protected $object;
 
     /**
-     *
+     * @return EntityHandler
      */
-    protected function setUp()
+    protected function getHandler()
     {
-        parent::setUp();
-        $database = new PDO(
+        return new EntityHandler(new PDO(
             'mysql:host:localhost',
             'root',
             ''
-        );
-        $this->object = new EntityHandler($database);
-        EntityHandler2::init($database);
+        ));
     }
 
     /**
-     * @covers \De\Idrinth\EntityGenerator\Test\EntityHandler<extended>::loadInstance
      */
     public function testCanProvideClass()
     {
-        $instance = $this->object->loadInstance(self::$class, 'generator-example', 'element_list', 1);
+        $instance = $this->getHandler()->provide(self::$class, 1);
         $this->assertInstanceOf(self::$class, $instance);
         $this->assertEquals(1, $instance->getAid());
     }
@@ -48,115 +39,52 @@ class EntityHandlerTest extends TestCase
     /**
      * @depends testCanProvideClass
      */
-    public function testCanStaticProvideClass()
-    {
-        $instance = EntityHandler2::provide(self::$class, 2);
-        $this->assertInstanceOf(self::$class, $instance);
-        $this->assertEquals(2, $instance->getAid());
-    }
-
-    /**
-     * @depends testCanProvideClass
-     * @covers \De\Idrinth\EntityGenerator\Test\EntityHandler<extended>::writeToDB
-     */
     public function testCanStoreClass()
     {
-        $this->assertEquals(1,
-            $this->object->writeToDB(
-                'generator-example',
-                'element_list',
-                new ElementList(),
-                array('name' => 'test')
-            )
-        );
-    }
-
-    /**
-     * @depends testCanStoreClass
-     * @depends testCanStaticProvideClass
-     */
-    public function testCanStaticStoreClass()
-    {
         $entity = new ElementList();
-        $entity->setName('test2');
-        $this->assertEquals(2, EntityHandler2::store($entity));
+        $entity->setName('test');
+        $this->assertEquals(1, $this->getHandler()->store($entity));
     }
 
     /**
      * @depends testCanStoreClass
-     * @covers \De\Idrinth\EntityGenerator\Test\EntityHandler<extended>::writeToDB
-     */
-    public function testCanNotStoreWrongClass()
-    {
-        $this->assertFalse(
-            $this->object->writeToDB(
-                'generator-example',
-                'missing_element_list',
-                new ElementList(),
-                array('name' => 'test')
-            )
-        );
-    }
-
-    /**
-     * @depends testCanStoreClass
-     * @covers \De\Idrinth\EntityGenerator\Test\EntityHandler<extended>::loadFromDB
      */
     public function testCanLoadClass()
     {
         $entity = new ElementList(1);
-        $this->object->loadFromDB('generator-example', 'element_list', $entity);
+        $this->getHandler()->load($entity);
         $this->assertEquals('test', $entity->getName());
     }
 
     /**
      * @depends testCanLoadClass
-     * @covers \De\Idrinth\EntityGenerator\Test\EntityHandler<extended>::loadFromDB
      */
     public function testCanNotLoadMissingId()
     {
         $entity = new ElementList(17);
-        $this->object->loadFromDB('generator-example', 'element_list', $entity);
-        $this->assertFalse($entity->entityInitialized);
-    }
-
-    /**
-     * @depends testCanLoadClass
-     * @depends testCanStaticStoreClass
-     */
-    public function testCanStaticLoadClass()
-    {
-        $entity = new ElementList(2);
-        EntityHandler2::load($entity);
-        $this->assertEquals('test2', $entity->getName());
+        $this->getHandler()->load($entity);
+        $this->assertFalse($entity->getEntityInitialized());
     }
 
     /**
      * @depends testCanStoreClass
      * @depends testCanLoadClass
      * @depends testCanProvideClass
-     * @covers \De\Idrinth\EntityGenerator\Test\EntityHandler<extended>::writeToDB
      */
     public function testCanUpdateClass()
     {
-        $this->assertTrue(
-            $this->object->writeToDB('generator-example', 'element_list',
-                new ElementList(1),
-                array('name' => 'test-static')
-            )
-        );
+        $entity = new ElementList(1);
+        $entity->setName('test1');
+        $this->assertTrue($this->getHandler()->store($entity));
     }
 
     /**
-     * @depends testCanUpdateClass
-     * @depends testCanStaticStoreClass
-     * @depends testCanStaticProvideClass
-     * @depends testCanStaticLoadClass
+     * @depends testCanStoreClass
      */
-    public function testCanStaticUpdateClass()
+    public function testCanChangeClass()
     {
-        $entity = new ElementList(2);
-        $entity->setName('test2-static');
-        $this->assertTrue(EntityHandler2::store($entity));
+        $entity = new ElementList(1);
+        $this->getHandler()->load($entity);
+        $this->assertEquals('test1', $entity->getName());
     }
 }

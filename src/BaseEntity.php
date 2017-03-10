@@ -8,13 +8,7 @@ abstract class BaseEntity
      *
      * @var boolean
      */
-    public $entityInitialized = false;
-
-    /**
-     * @var int
-     * @column aid
-     * */
-    protected $aid;
+    protected $entityInitialized = false;
 
     /**
      *
@@ -28,10 +22,23 @@ abstract class BaseEntity
     }
 
     /**
-     * @return int
-     * */
-    public function getAid()
+    *
+    */
+    public function store()
     {
-        return $this->aid;
+        if ($this->entityInitialized) {
+            EntityHandlerFactory::get()->store($this);
+        }
     }
+
+    /**
+     * 
+     * @return boolean
+     */
+    public function getEntityInitialized()
+    {
+        return $this->entityInitialized;
+    }
+
+
 }
