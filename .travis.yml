@@ -11,11 +11,11 @@ services:
 git:
   depth: 3
 before_script:
-  - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.0" ]]; then phpenv config-rm xdebug.ini; fi
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.0." ]]; then phpenv config-rm xdebug.ini; fi
   - composer update
   - mysql < test/sql/generator-example.sql
 script:
-  - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.0" ]]; then phpunit --testdox --bootstrap vendor/autoload.php test/ ; fi
-  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then phpunit --testdox --coverage-xml /tmp/coverage.xml --whitelist src/ --bootstrap vendor/autoload.php test/ ; fi
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.0." ]]; then phpunit --testdox --bootstrap vendor/autoload.php test/ ; fi
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0." ]]; then phpunit --testdox --coverage-xml /tmp/coverage.xml --whitelist src/ --bootstrap vendor/autoload.php test/ ; fi
 after_success:
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then php vendor/bin/codacycoverage phpunit /tmp/coverage.xml ; fi
