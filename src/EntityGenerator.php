@@ -165,7 +165,7 @@ WHERE c.TABLE_SCHEMA=:schema
                 $this->formatter->toUpperCamelCase($schema),
                 $this->basePath
             ).DIRECTORY_SEPARATOR.'Entity';
-        if(!$this->createDirectoryIfNotExists($path)) {
+        if (!$this->createDirectoryIfNotExists($path)) {
             return false;
         }
         if (!$this->write(
