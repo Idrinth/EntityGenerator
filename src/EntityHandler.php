@@ -185,13 +185,11 @@ class EntityHandler
      * @return boolean
      */
     protected function shouldPropertyBeUpdated(ReflectionProperty $property) {
-        if($property->getName() === 'aid' || $property->getName() === 'entityInitialized') {
-            return false;
-        }
-        if($property->isStatic()) {
-            return false;
-        }
-        return true;
+        return !(
+            $property->getName() === 'aid' ||
+            $property->getName() === 'entityInitialized' ||
+            $property->isStatic()
+        );
     }
 
     /**
