@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class EntityTwigTest extends TestCase
 {
+
     /**
      *
      */
@@ -21,12 +22,12 @@ class EntityTwigTest extends TestCase
     }
 
     /**
-     *@depends testOnlyProvidesFilters
+     * @depends testOnlyProvidesFilters
      */
     public function testFiltersAreFilters()
     {
         $extension = new EntityTwig();
-        foreach($extension->getFilters() as $filter) {
+        foreach ($extension->getFilters() as $filter) {
             $this->assertInstanceOf('Twig_SimpleFilter', $filter);
         }
     }
