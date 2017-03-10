@@ -190,7 +190,7 @@ WHERE c.TABLE_SCHEMA=:schema
     protected function createDirectoryIfNotExists($path)
     {
         $counter = 0;
-        while (!is_dir($path) && $counter < 10) {
+        while (!is_dir($path) && $counter < 3) {
             mkdir($path, 0777, true);
             $counter++;
             sleep($counter*$counter);
