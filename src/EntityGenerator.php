@@ -193,7 +193,7 @@ WHERE c.TABLE_SCHEMA=:schema
         while (!is_dir($path) && $counter < 10) {
             mkdir($path, 0777, true);
             $counter++;
-            sleep($counter);
+            sleep($counter*$counter);
         }
         return is_dir($path);
     }
