@@ -36,6 +36,7 @@ class EntityHandlerTest extends TestCase
     }
 
     /**
+     * @covers EntityHandler2::loadInstance
      */
     public function testCanProvideClass()
     {
@@ -56,6 +57,7 @@ class EntityHandlerTest extends TestCase
 
     /**
      * @depends testCanProvideClass
+     * @covers EntityHandler2::writeToDB
      */
     public function testCanStoreClass()
     {
@@ -82,6 +84,7 @@ class EntityHandlerTest extends TestCase
 
     /**
      * @depends testCanStoreClass
+     * @covers EntityHandler2::writeToDB
      */
     public function testCanNotStoreWrongClass()
     {
@@ -97,6 +100,7 @@ class EntityHandlerTest extends TestCase
 
     /**
      * @depends testCanStoreClass
+     * @covers EntityHandler2::loadFromDB
      */
     public function testCanLoadClass()
     {
@@ -107,6 +111,7 @@ class EntityHandlerTest extends TestCase
 
     /**
      * @depends testCanLoadClass
+     * @covers EntityHandler2::loadFromDB
      */
     public function testCanNotLoadMissingId()
     {
@@ -130,6 +135,7 @@ class EntityHandlerTest extends TestCase
      * @depends testCanStoreClass
      * @depends testCanLoadClass
      * @depends testCanProvideClass
+     * @covers EntityHandler2::writeToDB
      */
     public function testCanUpdateClass()
     {

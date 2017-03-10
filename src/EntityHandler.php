@@ -35,8 +35,9 @@ class EntityHandler
     public static function init(PDO $database)
     {
         if (!self::$instance) {
-            // @codeCoverageIgnore this is automatically tested with the rest
+            // @codeCoverageIgnoreStart
             self::$instance = new self($database);
+            // @codeCoverageIgnoreEnd
         }
         return self::$instance;
     }
