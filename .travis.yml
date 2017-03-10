@@ -10,6 +10,9 @@ services:
   - mysql
 git:
   depth: 3
+addons:
+    code_climate:
+        repo_token: $CODECLIMATE_REPO_TOKEN
 before_script:
   - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.0" ]]; then phpenv config-rm xdebug.ini ; fi
   - composer update
