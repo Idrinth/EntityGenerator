@@ -165,10 +165,8 @@ WHERE c.TABLE_SCHEMA=:schema
                 $this->formatter->toUpperCamelCase($schema),
                 $this->basePath
             ).DIRECTORY_SEPARATOR.'Entity';
-        if (!$this->createDirectoryIfNotExists($path)) {
-            return false;
-        }
-        if (!$this->write(
+        return $this->createDirectoryIfNotExists($path) &&
+            $this->write(
                 $path.DIRECTORY_SEPARATOR.$class.'.php',
                 array(
                 'table' => $table,
@@ -176,10 +174,7 @@ WHERE c.TABLE_SCHEMA=:schema
                 'namespace' => $this->namespace,
                 'properties' => $this->getTableProperties($table, $schema)
                 )
-            )) {
-            return false;
-        }
-        return true;
+            );
     }
 
     /**
@@ -191,9 +186,11 @@ WHERE c.TABLE_SCHEMA=:schema
     {
         $counter = 0;
         while (!is_dir($path) && $counter < 3) {
+            // @codeCoverageIgnoreStart
             mkdir($path, 0777, true);
             $counter++;
             sleep($counter*$counter);
+            // @codeCoverageIgnoreEnd
         }
         return is_dir($path);
     }
@@ -206,6 +203,6 @@ WHERE c.TABLE_SCHEMA=:schema
      */
     protected function write($path, $data)
     {
-        return (bool) file_put_contents($path, $this->twig->render($data));
+        return false !== file_put_contents($path, $this->twig->render($data));
     }
 }
