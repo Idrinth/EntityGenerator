@@ -3,9 +3,8 @@
 namespace De\Idrinth\EntityGenerator\Test;
 
 use De\Idrinth\EntityGenerator\EntityTwig;
-use PHPUnit\Framework\TestCase;
 
-class EntityTwigTest extends TestCase
+class EntityTwigTest extends AbstractTestCase
 {
 
     /**

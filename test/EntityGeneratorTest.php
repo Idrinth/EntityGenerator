@@ -3,11 +3,8 @@
 namespace De\Idrinth\EntityGenerator\Test;
 
 use De\Idrinth\EntityGenerator\EntityGenerator as EntityGeneratorImplementation;
-use PDO;
-use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\Exception;
 
-class EntityGeneratorTest extends TestCase
+class EntityGeneratorTest extends AbstractTestCase
 {
     /**
      *
@@ -27,7 +24,7 @@ class EntityGeneratorTest extends TestCase
     {
         parent::setUp();
         $this->object = new EntityGenerator(
-            new PDO('mysql:host:localhost', 'root', ''),
+            $this->database,
             __DIR__.DIRECTORY_SEPARATOR.'{{schema}}',
             'De\Idrinth\EntityGenerator\Test'
         );
@@ -105,7 +102,7 @@ class EntityGeneratorTest extends TestCase
     public function testCanGenerateDefaultTableClasses()
     {
         $object = new EntityGeneratorImplementation(
-                new PDO('mysql:host:localhost', 'root', ''),
+                $this->database,
                 __DIR__.DIRECTORY_SEPARATOR.'{{schema}}',
                 'De\Idrinth\EntityGenerator\Test'
             );

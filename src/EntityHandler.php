@@ -4,22 +4,27 @@ namespace De\Idrinth\EntityGenerator;
 
 use PDO;
 use ReflectionClass;
-use ReflectionMethod;
 use ReflectionProperty;
 
 class EntityHandler
 {
     /**
      *
-     * @var EntityHandler
-     */
-    protected static $instance;
-
-    /**
-     *
      * @var PDO
      */
     protected $database;
+
+    /**
+     *
+     * @var DocBlockHelper
+     */
+    protected $handler;
+
+    /**
+     *
+     * @var EntityNameHandler
+     */
+    protected $names;
 
     /**
      *
@@ -30,59 +35,28 @@ class EntityHandler
     /**
      *
      * @param PDO $database
-     * @return EntityHandler
+     * @param DocBlockHelper $handler
+     * @param EntityNameHandler $names
      */
-    public static function init(PDO $database)
-    {
-        if (!self::$instance) {
-            // @codeCoverageIgnoreStart
-            self::$instance = new self($database);
-            // @codeCoverageIgnoreEnd
-        }
-        return self::$instance;
-    }
-
-    /**
-     *
-     * @param PDO $database
-     */
-    protected function __construct(PDO $database)
-    {
+    public function __construct(
+        PDO $database,
+        DocBlockHelper $handler = null,
+        EntityNameHandler $names = null
+    ) {
         $this->database = $database;
+        $this->handler = $handler?$handler:new DocBlockHelper();
+        $this->names = $names?$names:new EntityNameHandler();
     }
 
     /**
      *
-     * @param string $scheme
+     * @param string $schema
      * @param string $table
-     * @param BaseEntity $object
-     */
-    public function loadFromDB($scheme, $table, BaseEntity $object)
-    {
-        $result = $this->database->query("SELECT * FROM `$scheme`.`$table` WHERE aid={$object->getAid()}");
-        if (!$result || $result->rowCount() !== 1) {
-            return;
-        }
-        $nameHandler = new EntityNameHandler();
-        $object->entityInitialized = true;
-        foreach ($result->fetch(PDO::FETCH_ASSOC) as $column => $value) {
-            $setter = 'set'.$nameHandler->toUpperCamelCase($column);
-            if (method_exists($object, $setter)) {
-                call_user_func(array($object, $setter), $value);
-            }
-        }
-        $this->cache[$scheme][$table][$object->getAid()] = $object;
-    }
-
-    /**
-     *
-     * @param string $scheme
-     * @param string $table
-     * @param BaseEntity $object
+     * @param int $aid
      * @param string[] $data
      * @return boolean
      */
-    protected function updateEntity($scheme, $table, BaseEntity $object, $data)
+    protected function updateEntity($schema, $table, $aid, $data)
     {
         $string  = array();
         $replace = array();
@@ -91,83 +65,60 @@ class EntityHandler
             $replace[':'.$key] = $value;
         }
         $prep = $this->database->prepare(
-            "UPDATE `$scheme`.`$table` "
+            "UPDATE `$schema`.`$table` "
             . "SET ".implode(',', $string)." "
-            . "WHERE aid={$object->getAid()}"
+            . "WHERE aid={$aid}"
         );
         return $prep->execute($replace);
     }
 
     /**
      *
-     * @param string $scheme
+     * @param string $schema
      * @param string $table
-     * @param BaseEntity $object
+     * @param BaseEntity $entity
      * @param string[] $data
      * @return int|boolean
      */
-    protected function createEntity($scheme, $table, BaseEntity $object, $data)
+    protected function createEntity($schema, $table, BaseEntity $entity, $data)
     {
         $replace = array();
         foreach ($data as $key => $value) {
             $replace[':'.$key] = $value;
         }
         $prep = $this->database->prepare(
-            "INSERT INTO `$scheme`.`$table` "
+            "INSERT INTO `$schema`.`$table` "
             . "(`".implode("`,`", array_keys($data))."`) "
             . "VALUES (".implode(",", array_keys($replace)).")"
         );
         if ($prep->execute($replace)) {
             $aid = $this->database->lastInsertId();
-            $this->cache[$scheme][$table][$aid] = $object;
+            $this->cache[$schema][$table][$aid] = $entity;
             return $aid;
         }
         return false;
     }
 
     /**
-     *
-     * @param string $scheme
-     * @param string $table
-     * @param BaseEntity $object
-     * @param string[] $data
-     * @return int|boolean
-     */
-    public function writeToDB($scheme, $table, BaseEntity $object, $data)
-    {
-        if ($object->getAid()) {
-            return $this->updateEntity($scheme, $table, $object, $data);
-        }
-        return $this->createEntity($scheme, $table, $object, $data);
-    }
-
-    /**
      * This loads data into the given entity
      * @param BaseEntity $entity
      */
-    public static function load(BaseEntity $entity)
+    public function load(BaseEntity $entity)
     {
         $reflection = new ReflectionClass($entity);
-        self::$instance->loadFromDB(
-            self::getDocValue($reflection, 'database'),
-            self::getDocValue($reflection, 'table'),
-            $entity
-        );
-    }
-
-    /**
-     * This loads data into the given entity
-     * @param string $scheme
-     * @param string $table
-     * @param int $aid
-     * @return BaseEntity
-     */
-    public function loadInstance($class, $scheme, $table, $aid)
-    {
-        if (!isset($this->cache[$scheme][$table][$aid])) {
-            $this->cache[$scheme][$table][$aid] = new $class($aid);
+        $schema = $this->handler->getDatabase($reflection);
+        $table = $this->handler->getTable($reflection);
+        $result = $this->database->query("SELECT * FROM `$schema`.`$table` WHERE aid={$entity->getAid()}");
+        if (!$result || $result->rowCount() !== 1) {
+            return;
         }
-        return $this->cache[$scheme][$table][$aid];
+        foreach ($result->fetch(PDO::FETCH_ASSOC) as $column => $value) {
+            $setter = 'set'.$this->names->toUpperCamelCase($column);
+            if (method_exists($entity, $setter)) {
+                call_user_func(array($entity, $setter), $value);
+            }
+        }
+        $this->cache[$schema][$table][$entity->getAid()] = $entity;
     }
 
     /**
@@ -176,15 +127,15 @@ class EntityHandler
      * @param int $aid
      * @return BaseEntity $entity
      */
-    public static function provide($class, $aid)
+    public function provide($class, $aid)
     {
         $reflection = new ReflectionClass($class);
-        return self::$instance->loadInstance(
-                $class,
-                self::getDocValue($reflection, 'database'),
-                self::getDocValue($reflection, 'table'),
-                $aid
-        );
+        $schema = $this->handler->getDatabase($reflection);
+        $table = $this->handler->getTable($reflection);
+        if (!isset($this->cache[$schema][$table][$aid])) {
+            $this->cache[$schema][$table][$aid] = new $class($aid);
+        }
+        return $this->cache[$schema][$table][$aid];
     }
 
     /**
@@ -192,45 +143,69 @@ class EntityHandler
      * @param BaseEntity $entity
      * @return boolean|int
      */
-    public static function store(BaseEntity $entity)
+    public function store(BaseEntity $entity)
     {
         $reflection = new ReflectionClass($entity);
-        $data = array();
-        foreach ($reflection->getProperties() as $property) {
-            /* @var $property ReflectionProperty */
-            $methodName = 'get'.strtoupper($property->name{0}).substr($property->name, 1);
-            if (
-                !$property->isStatic() &&
-                $property->getName() !== 'aid' &&
-                $property->getName() !== 'entityInitialized' &&
-                $reflection->hasMethod($methodName) &&
-                $reflection->getMethod($methodName)->isPublic() &&
-                !$reflection->getMethod($methodName)->isStatic()
-            ) {
-                $data[self::getDocValue($property, 'column')] = $reflection->getMethod($methodName)->invoke($entity);
-            }
+        if ($entity->getAid()) {
+            return $this->updateEntity(
+                $this->handler->getDatabase($reflection),
+                $this->handler->getTable($reflection),
+                $entity->getAid(),
+                $this->getPropertiesToUpdate($reflection, $entity)
+            );
         }
-        return self::$instance->writeToDB(
-                self::getDocValue($reflection, 'database'),
-                self::getDocValue($reflection, 'table'),
-                $entity,
-                $data
+        return $this->createEntity(
+            $this->handler->getDatabase($reflection),
+            $this->handler->getTable($reflection),
+            $entity,
+            $this->getPropertiesToUpdate($reflection, $entity)
         );
     }
 
     /**
      *
-     * @param ReflectionClass|ReflectionMethod $reflection
-     * @param string $identifier
-     * @return string
+     * @param \De\Idrinth\EntityGenerator\ReflectionClass $reflection
+     * @param BaseEntity $entity
+     * @return array
      */
-    protected static function getDocValue($reflection, $identifier)
-    {
-        preg_match(
-            "/@$identifier (.*?)\s/",
-            $reflection->getDocComment(),
-            $value
+    protected function getPropertiesToUpdate(ReflectionClass $reflection, BaseEntity $entity) {
+        $data = array();
+        foreach ($reflection->getProperties() as $property) {
+            /* @var $property ReflectionProperty */
+            $methodName = 'get'.strtoupper($property->name{0}).substr($property->name, 1);
+            if (
+                $this->shouldPropertyBeUpdated($property) &&
+                $this->doesGetterExist($reflection, $methodName)
+            ) {
+                $data[$this->handler->getColumn($property)] = $reflection->getMethod($methodName)->invoke($entity);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     *
+     * @param ReflectionProperty $property
+     * @param string $methodName
+     * @return boolean
+     */
+    protected function shouldPropertyBeUpdated(ReflectionProperty $property) {
+        return !(
+            $property->getName() === 'aid' ||
+            $property->getName() === 'entityInitialized' ||
+            $property->isStatic()
         );
-        return $value[1];
+    }
+
+    /**
+     *
+     * @param ReflectionClass $reflection
+     * @param string $methodName
+     * @return boolean
+     */
+    protected function doesGetterExist(ReflectionClass $reflection, $methodName) {
+        return $reflection->hasMethod($methodName) &&
+                $reflection->getMethod($methodName)->isPublic() &&
+                !$reflection->getMethod($methodName)->isStatic();
     }
 }

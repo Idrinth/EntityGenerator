@@ -1,0 +1,59 @@
+{% block prop %}
+{% block propertyBlock %}
+    /**
+    * @var {{property.type}}
+{% if property.autoincrement %}
+    * @autoincrement
+{% endif %}
+    * @column {{property.name}}
+    **/
+{% endblock %}
+    protected ${{property.name|toLowerCamelCase}};
+
+{%endblock%}
+{% block getPropertyBlock %}
+
+{% block getPropertyBlockHeader %}
+    /**
+    * @return {% if property.target %}
+{{property.target|toUpperCamelCase}}
+{%else%}
+{{property.type}}
+{%endif%}
+    **/
+{% endblock %}
+    public function get{{property.name|toUpperCamelCase}}() {
+{% if not property.autoincrement %}
+        $this->initEntity();
+{% endif %}
+{% if property.target %}
+        if(is_int($this->{{property.name|toLowerCamelCase}})) {
+            $this->{{property.name|toLowerCamelCase}} = EntityHandlerFactory::get()->provide(
+                '{{namespace}}\{{schema|toUpperCamelCase}}\Entity\{{ property.type|toUpperCamelCase }}',
+                $this->{{property.name|toLowerCamelCase}}
+            );
+        }
+{% endif %}
+        return $this->{{property.name|toLowerCamelCase}};
+    }
+
+{% endblock %}
+{% if not property.autoincrement %}
+{% block setPropertyBlock %}
+
+{% block setPropertyBlockHeader %}
+    /**
+    * @param {% if property.target %}
+{{property.target|toUpperCamelCase}}
+{%else%}
+{{property.type}}
+{%endif%}
+    **/
+{% endblock %}
+    public function set{{property.name|toUpperCamelCase}}({{ property.target|toUpperCamelCase }} $param) {
+        $this->initEntity();
+        $this->{{property.name|toLowerCamelCase}} = $param;
+    }
+
+{% endblock %}
+{% endif %}

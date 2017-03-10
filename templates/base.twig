@@ -1,80 +1,32 @@
 <?php
 namespace {{namespace}}\{{schema|toUpperCamelCase}}\Entity;
 {% block baseEntity %}
-    use De\Idrinth\EntityGenerator\BaseEntity;{% endblock %}
-    {% block baseFactory %}
-        use De\Idrinth\EntityGenerator\EntityHandler;{% endblock %}
-        {% block classHeader %}
-            /**
-            * Automatically generated entity for
-            * @table {{table}}
-            * @database {{schema}}
-            **/
-        {% endblock %}
-        class {{table|toUpperCamelCase}} extends BaseEntity {
-        {% for property in properties %}
-            {% block prop %}
-                {% block propertyBlock %}
-                    /**
-                    * @var {{property.type}}
-                    {% if property.autoincrement %}* @autoincrement{% endif %}
-                    * @column {{property.name}}
-                    **/
-                {% endblock %}
-                protected ${{property.name|toLowerCamelCase}};
-                {% block getPropertyBlock %}
-                    {% block getPropertyBlockHeader %}
-                        /**
-                        * @return {% if property.target %}{{property.target|toUpperCamelCase}}{%else%}{{property.type}}{%endif%}
-                        **/
-                    {% endblock %}
-                    public function get{{property.name|toUpperCamelCase}}() {
-                    $this->initEntity();
-                    {% if property.target %}
-                        if(is_int($this->{{property.name|toLowerCamelCase}})) {
-                        $this->{{property.name|toLowerCamelCase}} = EntityHandler::provide(
-                        '{{namespace}}\{{schema|toUpperCamelCase}}\Entity\{{ property.type|toUpperCamelCase }}',
-                        $this->{{property.name|toLowerCamelCase}}
-                        );
-                        }
-                    {% endif %}
-                    return $this->{{property.name|toLowerCamelCase}};
-                    }
-                {% endblock %}
-                {% if not property.autoincrement %}
-                    {% block setPropertyBlock %}
-                        {% block setPropertyBlockHeader %}
-                            /**
-                            * @param {% if property.target %}{{property.target|toUpperCamelCase}}{%else%}{{property.type}}{%endif%}
-                            **/
-                        {% endblock %}
-                        public function set{{property.name|toUpperCamelCase}}({{ property.target|toUpperCamelCase }} $param) {
-                        $this->initEntity();
-                        $this->{{property.name|toLowerCamelCase}} = $param;
-                        }
-                    {% endblock %}
-                {% endif %}
-            {% endblock %}
-        {% endfor %}
+use De\Idrinth\EntityGenerator\BaseEntity;
+{% endblock %}
+{% block baseFactory %}
+use De\Idrinth\EntityGenerator\EntityHandlerFactory;
+{% endblock %}
 
-        /**
-        *
-        */
-        protected function initEntity()
-        {
+{% block classHeader %}
+/**
+* Automatically generated entity for
+* @table {{table}}
+* @database {{schema}}
+**/
+{% endblock %}
+class {{table|toUpperCamelCase}} extends BaseEntity {
+{% for property in properties %}
+{% include 'property.twig' %}
+{% endfor %}
+
+    /**
+    *
+    */
+    protected function initEntity()
+    {
         if ($this->aid && !$this->entityInitialized) {
-        EntityHandler::load($this);
-        $this->entityInitialized = true;
+            $this->entityInitialized = true;
+            EntityHandlerFactory::get()->load($this);
         }
-        }
-
-        /**
-        *
-        */
-        protected function store()
-        {
-        if ($this->entityInitialized) {
-        EntityHandler::store($this);
-        }
-        }
-        }
+    }
+}
