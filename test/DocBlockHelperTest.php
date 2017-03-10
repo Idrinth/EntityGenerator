@@ -25,21 +25,21 @@ class DocBlockHelperTest extends TestCase
     {
         parent::setUp();
         $this->helper = new DocBlockHelper();
-        $this->reflection = new ReflectionClass('De\Idrinth\EntityGenerator\Test\GeneratorExample\Entity\ElementList');
+        $this->reflection = new ReflectionClass('De\Idrinth\EntityGenerator\Test\Test\Entity\Element');
     }
 
     /**
      */
     public function testCanGetDatabase()
     {
-        $this->assertEquals('generator-example', $this->helper->getDatabase($this->reflection));
+        $this->assertEquals('test', $this->helper->getDatabase($this->reflection));
     }
 
     /**
      */
     public function testCanGetTable()
     {
-        $this->assertEquals('element_list', $this->helper->getTable($this->reflection));
+        $this->assertEquals('element', $this->helper->getTable($this->reflection));
     }
 
     /**

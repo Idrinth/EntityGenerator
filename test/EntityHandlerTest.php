@@ -13,7 +13,7 @@ class EntityHandlerTest extends TestCase
      *
      * @var string
      */
-    protected static $class='De\Idrinth\EntityGenerator\Test\GeneratorExample\Entity\ElementList';
+    protected static $class='De\Idrinth\EntityGenerator\Test\Test\Entity\Element';
 
     /**
      * @return EntityHandler

@@ -14,6 +14,7 @@ before_script:
   - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.1" ]]; then phpenv config-rm xdebug.ini ; fi
   - composer update
   - mysql < test/sql/generator-example.sql
+  - mysql < test/sql/test.sql
 script:
   - phpunit --testdox --bootstrap vendor/autoload.php test/
 after_success:
